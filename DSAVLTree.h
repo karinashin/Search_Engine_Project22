@@ -106,8 +106,9 @@ private:
     int height;//height of entire tree
     int count;//total number of nodes
 
-    bool contains(Node<T>* n, T& val);
+    bool contains(Node<T>* n, T& val);//TODO test private functions?
     void insert(Node<T>*& n, T& val);
+    int max(int a, int b);//get max of two integers
 
 public:
     DSAVLTree();//Rule of 3
@@ -117,8 +118,6 @@ public:
     Node<T>& copyHelper(Node<T>*& node);
 
     int getHeight(Node<T>* node);//get height from any starting node
-    int max(int a, int b);//get max of two integers
-
 //    void insert(T& val);
     bool contains(T& val) { return contains(root, val); }
     void clear();//delete entire tree
@@ -126,6 +125,7 @@ public:
     Node<T>* balanceTree(Node<T>* node);//balance the tree using right/left rotate
     Node<T>* rightRotate(Node<T>* node);
     Node<T>* leftRotate(Node<T>* node);
+    //should I have LL LR RL RR or can I use a combo of above
 
     void preOrder(Node<T>* n);//print functions
     void postOrder(Node<T>* n);

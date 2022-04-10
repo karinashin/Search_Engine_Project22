@@ -1,5 +1,5 @@
 //
-// Created by 18476 on 4/9/2022.
+// Created by Karina Shin on 4/9/2022.
 //
 
 #ifndef INC_22S_FINAL_PROJ_WORD_H
