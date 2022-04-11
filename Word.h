@@ -20,7 +20,7 @@ private:
 public:
     Word(string word);
     void sort();//sorts documents by index (doc with largest freq. goes first)
-
+    bool operator<(const Word& w);
     string getStr();
     vector<Document> getDocs();
     vector<int> getFrequency();

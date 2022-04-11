@@ -5,15 +5,23 @@
 #include "DSAVLTree.h"
 
 TEST_CASE("DSAVLTree", "[template T]"){
-    SECTION("getHeight")
+    SECTION("operator = ")
+    {
+
+    }
+    SECTION("deleteTree")
+    {
+
+    }
+    SECTION("copy")//probably wrong
+    {
+
+    }
+    SECTION("insert")
     {
 
     }
     SECTION("contains")
-    {
-
-    }
-    SECTION("clear")
     {
 
     }
@@ -26,6 +34,14 @@ TEST_CASE("DSAVLTree", "[template T]"){
 
     }
     SECTION("leftRotate")
+    {
+
+    }
+    SECTION("doubleLeft")
+    {
+
+    }
+    SECTION("doubleRight")
     {
 
     }

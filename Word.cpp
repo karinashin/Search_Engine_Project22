@@ -9,6 +9,11 @@ Word::Word(string word)
     str = word;
 }
 
+bool Word::operator<(const Word& w)
+{
+    //TODO organize by str?
+}
+
 void Word::sort()
 {
     //TODO
