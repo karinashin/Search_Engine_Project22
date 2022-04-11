@@ -14,6 +14,7 @@ private:
     Node* left = nullptr;
     Node* right = nullptr;
     int height;
+
 public:
     Node();
     Node(T val);
@@ -26,6 +27,7 @@ public:
     T& getData();
     void setData(const T& val);
     int getHeight();
+    void setHeight(int h);
 };
 
 template <typename T>
@@ -96,49 +98,54 @@ int Node<T>::getHeight()
     return height;
 }
 
+template <typename T>
+void Node<T>::setHeight(int h)
+{
+    height = h;
+}
+
 
 template <typename T>
 class DSAVLTree {
 private:
     Node<T>* root;
-    Node<T>* left;
-    Node<T>* right;
-    int height;//height of entire tree
+//    Node<T>* left;
+//    Node<T>* right;
+//    int height;//height of entire tree
     int count;//total number of nodes
 
     bool contains(Node<T>* n, T& val);//TODO test private functions?
     void insert(Node<T>*& n, T& val);
     int max(int a, int b);//get max of two integers
+    int height(Node<T>* node);//get height from any starting node
 
 public:
     DSAVLTree();//Rule of 3
     ~DSAVLTree();
-    void deleteTree(Node<T>* node);
+    void deleteTree(Node<T>*& node);
     DSAVLTree& operator= (const DSAVLTree<T>& copy);
     Node<T>& copyHelper(Node<T>*& node);
 
-    int getHeight(Node<T>* node);//get height from any starting node
-//    void insert(T& val);
+//    int getHeight(Node<T>* node);//get height from any starting node
+    void insert(const T& x);
     bool contains(T& val) { return contains(root, val); }
-    void clear();//delete entire tree
 
-    Node<T>* balanceTree(Node<T>* node);//balance the tree using right/left rotate
-    Node<T>* rightRotate(Node<T>* node);
-    Node<T>* leftRotate(Node<T>* node);
-    //should I have LL LR RL RR or can I use a combo of above
+    void balanceTree(Node<T>*& node);//balance the tree using right/left rotate
+    void rightRotate(Node<T>*& k1);
+    void leftRotate(Node<T>*& k2);
+    void doubleLeft(Node<T>*& k3);
+    void doubleRight(Node<T>*& k1);
 
-    void preOrder(Node<T>* n);//print functions
-    void postOrder(Node<T>* n);
-    void inOrder(Node<T>* n);
+    void inOrder(Node<T>* n);//print tree in order
 };
 
 template <typename T>
 DSAVLTree<T>::DSAVLTree()
 {
     root = nullptr;
-    left = nullptr;
-    right = nullptr;
-    height = 0;
+//    left = nullptr;
+//    right = nullptr;
+//    height = 0;
     count = 0;
 }
 
@@ -149,19 +156,19 @@ DSAVLTree<T>::~DSAVLTree()
 }
 
 template <typename T>
-void DSAVLTree<T>::deleteTree(Node<T>* node)
+void DSAVLTree<T>::deleteTree(Node<T>*& node)
 {
-    Node<T>* curr = root;
-    if (curr != nullptr){//postOrder
-        deleteTree(curr->getLeft());
-        deleteTree(curr->getRight());
-        delete curr;
+//    Node<T>* curr = root;
+    if (node != nullptr){//postOrder
+        deleteTree(node->getLeft());
+        deleteTree(node->getRight());
+        delete node;
     }
+    node = nullptr;
 
-    root = nullptr;
-    left = nullptr;
-    right = nullptr;
-    height = 0;
+//    left = nullptr;
+//    right = nullptr;
+//    height = 0;
 }
 
 template <typename T>
@@ -188,27 +195,27 @@ Node<T>& DSAVLTree<T>::copyHelper(Node<T>*& node)//for recursion
 }
 
 
-template <typename T>
-int DSAVLTree<T>::getHeight(Node<T>* node)
-{
-    //go all the way down left and right of given node
-    //return the max between those two heights
-    int left = 0;
-    Node<T>* curr = node;
-    while (curr->getLeft() != nullptr){
-        curr = curr->getLeft();
-    }
-    left = curr->getHeight();
-
-    int right = 0;
-    curr = node;//reset curr
-    while (curr->getRight() != nullptr){
-        curr = curr->getRight();
-    }
-    right = curr->getHeight();
-
-    return max(left, right);
-}
+//template <typename T>
+//int DSAVLTree<T>::getHeight(Node<T>* node)
+//{
+//    //go all the way down left and right of given node
+//    //return the max between those two heights
+//    int left = 0;
+//    Node<T>* curr = node;
+//    while (curr->getLeft() != nullptr){
+//        curr = curr->getLeft();
+//    }
+//    left = curr->getHeight();
+//
+//    int right = 0;
+//    curr = node;//reset curr
+//    while (curr->getRight() != nullptr){
+//        curr = curr->getRight();
+//    }
+//    right = curr->getHeight();
+//
+//    return max(left, right);
+//}
 
 template <typename T>
 int DSAVLTree<T>::max(int a, int b)
@@ -216,6 +223,20 @@ int DSAVLTree<T>::max(int a, int b)
     if (a > b)
         return a;
     return b;
+}
+
+template <typename T>
+int DSAVLTree<T>::height(Node<T>* node)
+{
+    if (node == nullptr)
+        return -1;
+    return node->getHeight();
+}
+
+template <typename T>
+void DSAVLTree<T>::insert(const T& x)//public
+{
+    insert(root, x);
 }
 
 template <typename T>
@@ -232,18 +253,11 @@ bool DSAVLTree<T>::contains(Node<T>* n, T& val)
 }
 
 template <typename T>
-void DSAVLTree<T>::clear()
-{
-    deleteTree(root);
-    height = 0;
-}
-
-template <typename T>
-void DSAVLTree<T>::insert(Node<T>*& n, T& val)
+void DSAVLTree<T>::insert(Node<T>*& n, T& val)//private
 {
     if (n == nullptr){//tree is empty or at the end of a leaf
         n = new Node<T>(val);//make new node to insert
-        height++;
+//        height++;
     }
     else if (val < n->getData())//go to the left for smaller
         insert(n->getLeft(), val);
@@ -251,53 +265,73 @@ void DSAVLTree<T>::insert(Node<T>*& n, T& val)
         insert(n->getRight(), val);
     else
         ;//ignore duplicates
+
+    balanceTree(n);
 }
 
 template <typename T>
-Node<T>* DSAVLTree<T>::balanceTree(Node<T>* node)
+void DSAVLTree<T>::balanceTree(Node<T>*& node)
 {
-
-}
-
-template <typename T>
-Node<T>* DSAVLTree<T>::rightRotate(Node<T>* node)
-{
-
-}
-
-template <typename T>
-Node<T>* DSAVLTree<T>::leftRotate(Node<T>* node)
-{
-
-}
-
-template <typename T>
-void DSAVLTree<T>::preOrder(Node<T>* n)//create copy
-{
-    if (n != nullptr){
-        std::cout << n->getData();
-        preOrder(n->getLeft());
-        preOrder(n->getRight());
+    if (node == nullptr)
+        return;
+    if (height(node->getLeft()) - height(node->getRight()) > 1){//Case 1 or 2
+        if (height(node->getLeft()->getLeft()) >= height(node->getLeft()->getRight()))//case 1
+            leftRotate(node);
+        else
+            doubleLeft(node);//Case 2
     }
+    else if (height(node->getRight()) - height(node->getLeft()) > 1){//Case 3 or 4
+        if (height(node->getRight()->getRight()) >= height(node->getRight()->getLeft()))//Case 4
+            rightRotate(node);
+        else
+            doubleRight(node);//Case 3
+    }
+    node->setHeight(max(height(node->getLeft()), height(node->getRight())) + 1);
 }
 
 template <typename T>
-void DSAVLTree<T>::postOrder(Node<T>* n)//delete/clear a tree
+void DSAVLTree<T>::rightRotate(Node<T>*& k1)
 {
-    if (n != nullptr){
-        postOrder(n->getLeft());
-        postOrder(n->getRight());
-        std::cout << n->getData();
-    }
+    Node<T>* k2 = k1->getRight();
+    k1->setRight(k2->getLeft());
+    k2->setLeft(k1);
+    k1->setHeight(max(height(k1->getLeft()), height(k1->getRight())) + 1);
+    k2->setHeight(max(height(k2->getRight()), k1->getHeight()) + 1);
+    k1 = k2;
+}
+
+template <typename T>
+void DSAVLTree<T>::leftRotate(Node<T>*& k2)
+{
+    Node<T>* k1 = k2->getLeft();
+    k2->getLeft() = k1->getRight();
+    k1->setRight(k2);
+    k2->setHeight(max(height(k2->getLeft()), height(k2->getRight())) + 1);
+    k1->setHeight(max(height(k1->getLeft()), k2->getHeight()) + 1);
+    k2 = k1;
+}
+
+template <typename T>
+void DSAVLTree<T>::doubleLeft(Node<T>*& k3)
+{
+    rightRotate(k3->getLeft());
+    leftRotate(k3);
+}
+
+template <typename T>
+void DSAVLTree<T>::doubleRight(Node<T>*& k1)
+{
+    leftRotate(k1->getRight());
+    rightRotate(k1);
 }
 
 template <typename T>
 void DSAVLTree<T>::inOrder(Node<T>* n)//visit nodes in ascending/descending order
 {
     if (n != nullptr){
-        postOrder(n->getLeft());
-        std::cout << n->getData();
-        postOrder(n->getRight());
+        inOrder(n->getLeft());
+        std::cout << n->getData() << std::endl;
+        inOrder(n->getRight());
     }
 }
 
