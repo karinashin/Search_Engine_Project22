@@ -3,6 +3,13 @@
 //
 
 #include "Document.h"
+Document::Document(string file)
+{
+    title = "";
+    publication = "";
+    date = "";
+    filePath = file;
+}
 
 Document::Document(string t, string p, string d, string f)
 {

@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 #include "Document.h"
 
 using namespace std;
@@ -21,6 +22,10 @@ public:
     Word(string word);
     void sort();//sorts documents by index (doc with largest freq. goes first)
     bool operator<(const Word& w);
+    void toLower();
+    void removePunc();
+    bool isStopWord();
+
     string getStr();
     vector<Document> getDocs();
     vector<int> getFrequency();

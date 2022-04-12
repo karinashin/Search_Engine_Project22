@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(22s_final_proj)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 configure_file(test.json COPYONLY)
 

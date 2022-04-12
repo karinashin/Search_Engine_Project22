@@ -13,14 +13,16 @@ private:
     string title;
     string publication;
     string date;
-    string filePath;//TODO
+    string filePath;
 
 public:
+    Document(string file);
     Document(string t, string p, string d, string f);
+
     string getTitle();
     string getPub();
     string getDate();
-    string getPath();//TODO
+    string getPath();
 };
 
 

@@ -20,9 +20,9 @@ public:
     Node(T val);
     Node& operator= (const Node& copy);
 
-    Node* getLeft();//returns the next node's value
+    Node*& getLeft();//returns the next node's value
     void setLeft(Node* data);
-    Node* getRight();//returns the prev node's value
+    Node*& getRight();//returns the prev node's value
     void setRight(Node* data);
     T& getData();
     void setData(const T& val);
@@ -57,7 +57,7 @@ Node<T>& Node<T>::operator= (const Node& copy)
 }
 
 template <typename T>
-Node<T>* Node<T>::getLeft()
+Node<T>*& Node<T>::getLeft()
 {
     return left;
 }
@@ -69,7 +69,7 @@ void Node<T>::setLeft(Node<T>* data)
 }
 
 template <typename T>
-Node<T>* Node<T>::getRight()
+Node<T>*& Node<T>::getRight()
 {
     return right;
 }
@@ -158,13 +158,14 @@ DSAVLTree<T>::~DSAVLTree()
 template <typename T>
 void DSAVLTree<T>::deleteTree(Node<T>*& node)
 {
-//    Node<T>* curr = root;
+    Node<T>* curr = root;
     if (node != nullptr){//postOrder
         deleteTree(node->getLeft());
         deleteTree(node->getRight());
         delete node;
     }
     node = nullptr;
+//    root = nullptr;
 
 //    left = nullptr;
 //    right = nullptr;
