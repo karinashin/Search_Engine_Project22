@@ -44,10 +44,12 @@ void DocParser::parse(const string& filename) {
             break;//don't add to tree
         curr.removePunc();//remove punctuation
         //TODO perform stemming
+        //put unique words into the avl tree
+        if (!words.contains(curr)){//if the word is not already in the tree
+            //words.insert(curr); TODO error
+        }
+        else{}//word is already in the list, add to the index
     }
-    //remove stop words, remove caps/punc, perform stemming
-    //put unique word into avl tree
-    //if already exists, add to index
 }
 
 void DocParser::getFiles(const string& directory)

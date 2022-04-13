@@ -14,6 +14,11 @@ bool Word::operator<(const Word& w)
     //TODO organize by str?
 }
 
+bool Word::operator==(const Word& w)
+{
+    return str == w.str;//if theyre the same string, theyre the same word
+}
+
 void Word::sort()
 {
     //TODO
