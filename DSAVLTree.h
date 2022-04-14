@@ -127,7 +127,7 @@ public:
     Node<T>& copyHelper(Node<T>*& node);
 
 //    int getHeight(Node<T>* node);//get height from any starting node
-    void insert(const T& x);
+    void insert(T& x);
     bool contains(T& val) { return contains(root, val); }
 
     void balanceTree(Node<T>*& node);//balance the tree using right/left rotate
@@ -235,7 +235,7 @@ int DSAVLTree<T>::height(Node<T>* node)
 }
 
 template <typename T>
-void DSAVLTree<T>::insert(const T& x)//public
+void DSAVLTree<T>::insert(T& x)//public
 {
     insert(root, x);
 }

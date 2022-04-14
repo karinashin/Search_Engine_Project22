@@ -4,6 +4,10 @@
 
 #include "Word.h"
 
+Word::Word()
+{
+    str = "";
+}
 Word::Word(string word)
 {
     str = word;
@@ -54,7 +58,27 @@ bool Word::isStopWord()
     return false;
 }
 
+void Word::stemming()
+{
+    Porter2Stemmer::trim(str);//TODO error undefined reference
+    Porter2Stemmer::stem(str);
+}
+
 string Word::getStr() { return str; }
 vector<Document> Word::getDocs() { return docs; }
+
+void Word::incrFreq(Document& doc)
+{
+    for (int i = 0; i < docs.size(); i++){
+        if (docs.at(i) == doc){//found doc
+            frequency.at(i)++;//increment corresponding freq for existing doc
+            return;
+        }
+    }
+    //if function didn't return, no doc was found
+    docs.push_back(doc);//add new doc to word's index
+    frequency.push_back(1);//frequency that corresponds to the current doc
+}
+
 vector<int> Word::getFrequency() { return frequency; }
 int Word::getTotal() { return total; }

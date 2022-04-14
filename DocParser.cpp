@@ -30,7 +30,7 @@ void DocParser::parse(const string& filename) {
 //    string title = doc["title"].GetString(); TODO add back later
 //    string pub = doc["thread"]["published"].GetString();
 //    string date;
-    Document curr(filename);
+    Document currDoc(filename);
 
     string text = doc["text"].GetString();
     cout << "text: " << text << endl;
@@ -43,12 +43,13 @@ void DocParser::parse(const string& filename) {
         if (curr.isStopWord())
             break;//don't add to tree
         curr.removePunc();//remove punctuation
-        //TODO perform stemming
+        curr.stemming();//perform stemming
+
         //put unique words into the avl tree
-        if (!words.contains(curr)){//if the word is not already in the tree
-            //words.insert(curr); TODO error
+        if (!words.contains(curr)){//if the word is not already in the tree/new unique word
+            words.insert(curr);
         }
-        else{}//word is already in the list, add to the index
+        curr.incrFreq(currDoc);//index document
     }
 }
 
@@ -63,3 +64,7 @@ void DocParser::getFiles(const string& directory)
         }
     }
 }
+
+DSAVLTree<Word>& DocParser::getWordTree() { return words; }
+DSAVLTree<Word>& DocParser::getOrgTree() { return orgs; }
+DSAVLTree<Word>& DocParser::getPersonTree() { return people; }

@@ -19,6 +19,8 @@ public:
     Document(string file);
     Document(string t, string p, string d, string f);
 
+    bool operator==(const Document& d);
+
     string getTitle();
     string getPub();
     string getDate();

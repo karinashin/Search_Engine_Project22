@@ -26,6 +26,10 @@ private:
 public:
     void parse(const string& filename);
     void getFiles(const string& directory);
+
+    DSAVLTree<Word>& getWordTree();
+    DSAVLTree<Word>& getOrgTree();
+    DSAVLTree<Word>& getPersonTree();
 };
 
 
