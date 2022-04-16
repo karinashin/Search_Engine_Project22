@@ -15,7 +15,9 @@ Word::Word(string word)
 
 bool Word::operator<(const Word& w)
 {
-    //TODO organize by str?
+    if (str < w.str)
+        return true;
+    return false;
 }
 
 bool Word::operator==(const Word& w)
@@ -31,7 +33,7 @@ void Word::sort()
 void Word::toLower()
 {
     for (int i = 0; i < str.length(); i++)
-        tolower(str.at(i));
+        str.at(i) = tolower(str.at(i));
 }
 
 void Word::removePunc()
@@ -39,7 +41,7 @@ void Word::removePunc()
     string buffer;//no punc string
     for (int i = 0; i < str.length(); ++i)
     {
-        if (str.at(i) != '.' && str.at(i) != '!' && str.at(i) != '?' && str.at(i) != ',' && str.at(i) != ';' && str.at(i) != ':' && str.at(i) != '\"')//only add if its a letter
+        if (str.at(i) != '.' && str.at(i) != '!' && str.at(i) != '?' && str.at(i) != ',' && str.at(i) != ';' && str.at(i) != ':' && str.at(i) != '\"' && str.at(i) != '\n')//only add if its a letter
             buffer += str.at(i);
     }
     str = buffer;
@@ -52,20 +54,29 @@ bool Word::isStopWord()
     string curr;
     while (getline(stop, curr))//go through entire list of stop words
     {
-        if (curr == str)//the current string is a stop word
+        string s = curr.substr(0, curr.length()-1);//cut off end char
+        if (s == str){//the current string is a stop word
             return true;
+        }
     }
     return false;
 }
 
 void Word::stemming()
 {
-    Porter2Stemmer::trim(str);//TODO error undefined reference
-    Porter2Stemmer::stem(str);
+//    Porter2Stemmer::trim(str);//TODO error undefined reference
+//    Porter2Stemmer::stem(str);
 }
 
 string Word::getStr() { return str; }
-vector<Document> Word::getDocs() { return docs; }
+vector<Document>& Word::getDocs() { return docs; }
+void Word::printDocs()
+{
+    for (int i = 0; i < docs.size(); i++)
+    {
+        cout << docs.at(i).getPath() << endl;
+    }
+}
 
 void Word::incrFreq(Document& doc)
 {
@@ -80,5 +91,5 @@ void Word::incrFreq(Document& doc)
     frequency.push_back(1);//frequency that corresponds to the current doc
 }
 
-vector<int> Word::getFrequency() { return frequency; }
+vector<int>& Word::getFrequency() { return frequency; }
 int Word::getTotal() { return total; }

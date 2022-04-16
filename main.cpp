@@ -3,12 +3,31 @@
 #include <fstream>
 #include "include/rapidjson/document.h"
 #include "DocParser.h"
+#include "DSAVLTree.h"
+#include "Word.h"
 
 using namespace std;
 int main(int argc, char** argv) {
-    string input = "subset";
     DocParser parse;
-    parse.getFiles(input);
+    parse.getFiles(argv[1]);
+    cout << parse.getWordTree().getRoot()->getData().getStr() << endl;
+    cout << parse.getWordTree().getCount();
+    Word w("investors");
+    if (parse.getWordTree().contains(w)){
+        cout << "true" << endl;
+        parse.getWordTree().find(parse.getWordTree().getRoot(), w).printDocs();
+    }
+
+//    DSAVLTree<Word> tree;
+//    Word a("a");
+//    Word z("z");
+//    Word b("b");
+//    tree.insert(a);
+//    tree.insert(z);
+//    tree.insert(b);
+//    Word check("b");
+//    if (tree.contains(check))
+//        cout << "true";
 
 //    rapidjson::Document doc;
 //    ifstream stream;

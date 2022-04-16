@@ -9,6 +9,7 @@
 #include <fstream>
 #include <dirent.h>
 #include <filesystem>
+#include <vector>
 #include <sys/stat.h>
 #include "DSAVLTree.h"
 #include "Word.h"
@@ -24,8 +25,13 @@ private:
     DSAVLTree<Word> people;
 
 public:
-    void parse(const string& filename);
-    void getFiles(const string& directory);
+    void parse(const string& filename);//parse the documents and create 3 AVLTrees
+    void getFiles(const string& directory);//returns filenames for traversal through directory
+    vector<Document>& findIndex(Word& obj);//return the document index of a given Word object
+
+    vector<Document>& findWordIndex(Word& w);
+    vector<Document>& findOrgIndex(Word& org);
+    vector<Document>& findPersonIndex(Word& p);
 
     DSAVLTree<Word>& getWordTree();
     DSAVLTree<Word>& getOrgTree();

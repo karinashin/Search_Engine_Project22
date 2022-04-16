@@ -5,7 +5,7 @@
 #include "DocParser.h"
 
 void DocParser::parse(const string& filename) {
-    cout << "parse function" << endl;
+    cout << "NEW DOC: " << filename << endl;
     //TODO parse for org and person, put unique ones into avl tree
     //parse main text
     rapidjson::Document doc;
@@ -13,8 +13,6 @@ void DocParser::parse(const string& filename) {
     //for every file in the folder
     ifstream stream;
     stream.open(filename);
-    if (stream.is_open())
-        cout << "open" << endl;
 
     string wholeFile;
     string temp;
@@ -33,23 +31,35 @@ void DocParser::parse(const string& filename) {
     Document currDoc(filename);
 
     string text = doc["text"].GetString();
-    cout << "text: " << text << endl;
+//    cout << "text: " << text << endl;
 
     int space = text.find(" ");
     while (space != -1)
     {
+//        cout << "text: " << text << endl;
         Word curr(text.substr(0, space));
         curr.toLower();//remove caps
-        if (curr.isStopWord())
-            break;//don't add to tree
+        if (curr.isStopWord()){
+            text = text.substr(space + 1);//cut off curr word
+            space = text.find(" ");
+            continue;//don't add to tree
+        }
         curr.removePunc();//remove punctuation
-        curr.stemming();//perform stemming
-
+//        curr.stemming();//TODO perform stemming
+//        cout << "current: " << curr.getStr() << endl;
         //put unique words into the avl tree
         if (!words.contains(curr)){//if the word is not already in the tree/new unique word
+            curr.incrFreq(currDoc);
             words.insert(curr);
+            cout << "inserted " << curr.getStr() << endl;
         }
-        curr.incrFreq(currDoc);//index document
+        else{
+            words.find(words.getRoot(), curr).incrFreq(currDoc);//index document on object in tree
+//            curr.incrFreq(currDoc);//indexes a temporary variable, not the actual Word object in the tree
+        }
+        text = text.substr(space + 1);//cut off curr word
+        space = text.find(" ");
+//        cout << "root: " << words.getRoot()->getData().getStr() << endl;
     }
 }
 
@@ -64,6 +74,15 @@ void DocParser::getFiles(const string& directory)
         }
     }
 }
+
+vector<Document>& DocParser::findIndex(Word& obj)
+{
+    return words.find(words.getRoot(), obj).getDocs();
+}
+
+vector<Document>& DocParser::findWordIndex(Word& w) { return w.getDocs(); }
+vector<Document>& DocParser::findOrgIndex(Word& org) { return org.getDocs(); }
+vector<Document>& DocParser::findPersonIndex(Word& p) {return p.getDocs(); }
 
 DSAVLTree<Word>& DocParser::getWordTree() { return words; }
 DSAVLTree<Word>& DocParser::getOrgTree() { return orgs; }

@@ -8,13 +8,14 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <iostream>
 #include "Document.h"
 #include "porter2_stemmer.h"
 
 using namespace std;
 class Word {
 private:
-    string str;//DSString?
+    string str;
     vector<Document> docs;//documents word appears in
     vector<int> frequency;//frequency for each doc word appears in
     int total = 0;
@@ -31,9 +32,10 @@ public:
     void stemming();//using porter2 stemming library
 
     string getStr();
-    vector<Document> getDocs();
+    vector<Document>& getDocs();
+    void printDocs();
     void incrFreq(Document& doc);//given a doc, incrememnt its corresponding freq.
-    vector<int> getFrequency();
+    vector<int>& getFrequency();
     int getTotal();
 };
 
