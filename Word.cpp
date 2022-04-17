@@ -64,8 +64,8 @@ bool Word::isStopWord()
 
 void Word::stemming()
 {
-//    Porter2Stemmer::trim(str);//TODO error undefined reference
-//    Porter2Stemmer::stem(str);
+    Porter2Stemmer::trim(str);//TODO error undefined reference
+    Porter2Stemmer::stem(str);
 }
 
 string Word::getStr() { return str; }

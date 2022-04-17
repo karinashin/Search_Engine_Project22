@@ -5,7 +5,7 @@
 #include "DocParser.h"
 
 void DocParser::parse(const string& filename) {
-    cout << "NEW DOC: " << filename << endl;
+//    cout << "NEW DOC: " << filename << endl;
     //TODO parse for org and person, put unique ones into avl tree
     //parse main text
     rapidjson::Document doc;
@@ -45,13 +45,13 @@ void DocParser::parse(const string& filename) {
             continue;//don't add to tree
         }
         curr.removePunc();//remove punctuation
-//        curr.stemming();//TODO perform stemming
+        curr.stemming();
 //        cout << "current: " << curr.getStr() << endl;
         //put unique words into the avl tree
         if (!words.contains(curr)){//if the word is not already in the tree/new unique word
-            curr.incrFreq(currDoc);
+            curr.incrFreq(currDoc);//TODO combine contains and find
             words.insert(curr);
-            cout << "inserted " << curr.getStr() << endl;
+//            cout << "inserted " << curr.getStr() << endl;
         }
         else{
             words.find(words.getRoot(), curr).incrFreq(currDoc);//index document on object in tree

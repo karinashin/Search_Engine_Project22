@@ -9,14 +9,18 @@
 using namespace std;
 int main(int argc, char** argv) {
     DocParser parse;
+    cout << "parsing..." << endl;
     parse.getFiles(argv[1]);
-    cout << parse.getWordTree().getRoot()->getData().getStr() << endl;
-    cout << parse.getWordTree().getCount();
+    cout << "done!" << endl;
+//    cout << parse.getWordTree().getRoot()->getData().getStr() << endl;
+//    cout << parse.getWordTree().getCount();
     Word w("investors");
+    w.stemming();
     if (parse.getWordTree().contains(w)){
         cout << "true" << endl;
         parse.getWordTree().find(parse.getWordTree().getRoot(), w).printDocs();
     }
+    //data folder took 1:45 4/17
 
 //    DSAVLTree<Word> tree;
 //    Word a("a");
