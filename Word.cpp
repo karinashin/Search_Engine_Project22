@@ -47,20 +47,19 @@ void Word::removePunc()
     str = buffer;
 }
 
-bool Word::isStopWord()
-{
-    ifstream stop;
-    stop.open("stopWords.txt");
-    string curr;
-    while (getline(stop, curr))//go through entire list of stop words
-    {
-        string s = curr.substr(0, curr.length()-1);//cut off end char
-        if (s == str){//the current string is a stop word
-            return true;
-        }
-    }
-    return false;
-}
+//bool Word::isStopWord()
+//{
+//    DSAVLTree<string> stops;
+//    ifstream stop;
+//    stop.open("stopWords.txt");
+//    string curr;
+//    while (getline(stop, curr))//make an avl tree of stop words
+//    {
+//        string s = curr.substr(0, curr.length()-1);//cut off end char
+//        stops.insert(s);
+//    }
+//    return stops.contains(str);//if str is in the avl tree, its a stop word
+//}
 
 void Word::stemming()
 {
@@ -68,7 +67,7 @@ void Word::stemming()
     Porter2Stemmer::stem(str);
 }
 
-string Word::getStr() { return str; }
+string& Word::getStr() { return str; }
 vector<Document>& Word::getDocs() { return docs; }
 void Word::printDocs()
 {

@@ -11,6 +11,7 @@
 #include <iostream>
 #include "Document.h"
 #include "porter2_stemmer.h"
+#include "DSAVLTree.h"
 
 using namespace std;
 class Word {
@@ -18,6 +19,7 @@ private:
     string str;
     vector<Document> docs;//documents word appears in
     vector<int> frequency;//frequency for each doc word appears in
+//    DSAVLTree<string> stops;//stop words
     int total = 0;
 
 public:
@@ -28,10 +30,10 @@ public:
     bool operator==(const Word& w);
     void toLower();
     void removePunc();
-    bool isStopWord();
+//    bool isStopWord();
     void stemming();//using porter2 stemming library
 
-    string getStr();
+    string& getStr();
     vector<Document>& getDocs();
     void printDocs();
     void incrFreq(Document& doc);//given a doc, incrememnt its corresponding freq.

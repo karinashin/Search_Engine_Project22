@@ -16,12 +16,13 @@ int main(int argc, char** argv) {
 //    cout << parse.getWordTree().getCount();
     Word w("investors");
     w.stemming();
-    if (parse.getWordTree().contains(w)){
-        cout << "true" << endl;
-        parse.getWordTree().find(parse.getWordTree().getRoot(), w).printDocs();
-    }
-    //data folder took 1:45 4/17
+//    if (parse.getWordTree().contains(w)){
+//        cout << "true" << endl;
+//        parse.getWordTree().find(parse.getWordTree().getRoot(), w).printDocs();
+//    }
+    parse.getWordTree().find(parse.getWordTree().getRoot(), w).printDocs();
 
+    //data folder took 1:45 4/17
 //    DSAVLTree<Word> tree;
 //    Word a("a");
 //    Word z("z");

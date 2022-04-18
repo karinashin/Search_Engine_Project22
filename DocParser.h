@@ -23,11 +23,14 @@ private:
     DSAVLTree<Word> words;
     DSAVLTree<Word> orgs;
     DSAVLTree<Word> people;
+    DSAVLTree<string> stops;
 
 public:
+    DocParser();
     void parse(const string& filename);//parse the documents and create 3 AVLTrees
     void getFiles(const string& directory);//returns filenames for traversal through directory
     vector<Document>& findIndex(Word& obj);//return the document index of a given Word object
+    bool isStopWord(string& str);
 
     vector<Document>& findWordIndex(Word& w);
     vector<Document>& findOrgIndex(Word& org);
