@@ -33,7 +33,7 @@ void DocParser::parse(const string& filename) {
     stream.close();
 
     doc.Parse(wholeFile.c_str());
-    if (!doc.IsObject()) cout << "somethings wrong" << endl;
+//    if (!doc.IsObject()) cout << "somethings wrong" << endl;
 
     //make Document object for current file
 //    string title = doc["title"].GetString(); TODO add back later
