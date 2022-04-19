@@ -69,11 +69,12 @@ void Word::stemming()
 
 string& Word::getStr() { return str; }
 vector<Document>& Word::getDocs() { return docs; }
+
 void Word::printDocs()
 {
     for (int i = 0; i < docs.size(); i++)
     {
-        cout << docs.at(i).getPath() << endl;
+        cout << docs.at(i).getID() << endl;
     }
 }
 

@@ -39,7 +39,8 @@ void DocParser::parse(const string& filename) {
 //    string title = doc["title"].GetString(); TODO add back later
 //    string pub = doc["thread"]["published"].GetString();
 //    string date;
-    Document currDoc(filename);
+    string id = doc["uuid"].GetString();
+    Document currDoc(filename, id);
 
     string text = doc["text"].GetString();
 //    cout << "text: " << text << endl;

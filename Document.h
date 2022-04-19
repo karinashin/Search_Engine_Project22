@@ -14,17 +14,19 @@ private:
     string publication;
     string date;
     string filePath;
+    string uuid;
 
 public:
-    Document(string file);
-    Document(string t, string p, string d, string f);
+    Document(string file, string id);//temp for timing demo
+    Document(string t, string p, string d, string f, string id);
 
     bool operator==(const Document& d);
 
-    string getTitle();
-    string getPub();
-    string getDate();
-    string getPath();
+    string& getTitle();
+    string& getPub();
+    string& getDate();
+    string& getPath();
+    string& getID();
 };
 
 
