@@ -33,7 +33,7 @@ void DocParser::parse(const string& filename) {
     stream.close();
 
     doc.Parse(wholeFile.c_str());
-//    if (!doc.IsObject()) cout << "somethings wrong" << endl;
+    if (!doc.IsObject()) cout << "somethings wrong" << endl;
 
     //make Document object for current file
 //    string title = doc["title"].GetString(); TODO add back later
@@ -59,7 +59,6 @@ void DocParser::parse(const string& filename) {
         curr.stemming();
 //        cout << "current: " << curr.getStr() << endl;
         //put unique words into the avl tree
-//        Node<Word>& found = words.find(words.getRoot(), curr);//ref to word in tree
 
         if (!words.contains(curr)){//if the word is not already in the tree/new unique word
             curr.incrFreq(currDoc);//TODO combine contains and find

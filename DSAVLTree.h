@@ -277,39 +277,45 @@ void DSAVLTree<T>::balanceTree(Node<T>*& node)
 }
 
 template <typename T>
-void DSAVLTree<T>::rightRotate(Node<T>*& k1)
+void DSAVLTree<T>::rightRotate(Node<T>*& k1)//case 4 (RR), k1 = alpha
 {
-    Node<T>* k2 = k1->getRight();
-    k1->setRight(k2->getLeft());
-    k2->setLeft(k1);
+    Node<T>* k2 = k1->getRight();//rotation with right child, k2 = k1's right child
+    k1->setRight(k2->getLeft());//alpha/k1's right is set to its left child's left
+    k2->setLeft(k1);//k2's left now points to alpha/k1 (reassign)
+    //k2 is shifted "up" and k1/alpha is shifted "down"
     k1->setHeight(max(height(k1->getLeft()), height(k1->getRight())) + 1);
-    k2->setHeight(max(height(k2->getRight()), k1->getHeight()) + 1);
+    k2->setHeight(max(height(k2->getRight()), k1->getHeight()) + 1);//bc k1 is the left of k2 now
     k1 = k2;
 }
 
 template <typename T>
-void DSAVLTree<T>::leftRotate(Node<T>*& k2)
+void DSAVLTree<T>::leftRotate(Node<T>*& k2)//case 1 (LL), k2 = alpha
 {
-    Node<T>* k1 = k2->getLeft();
-    k2->getLeft() = k1->getRight();
-    k1->setRight(k2);
+    Node<T>* k1 = k2->getLeft();//rotation with left child, k1 = left child
+    k2->getLeft() = k1->getRight();//alpha/k2's left is set to its left child's right
+    k1->setRight(k2);//now that alpha points to k1's right, k1's right points to alpha
+    //shifts k1 "up" and k2/alpha "down"
     k2->setHeight(max(height(k2->getLeft()), height(k2->getRight())) + 1);
-    k1->setHeight(max(height(k1->getLeft()), k2->getHeight()) + 1);
+    k1->setHeight(max(height(k1->getLeft()), k2->getHeight()) + 1);//bc k2 is the right of k1 now
     k2 = k1;
 }
 
 template <typename T>
-void DSAVLTree<T>::doubleLeft(Node<T>*& k3)
-{
-    rightRotate(k3->getLeft());
-    leftRotate(k3);
+void DSAVLTree<T>::doubleLeft(Node<T>*& k3)//case 3 (LR)
+{//insertion into the left subtree of the right child of alpha
+    //rotate right child of alpha (k3) with its left child
+    rightRotate(k3->getLeft());//turn into case 4
+    //rotate alpha with its right child
+    leftRotate(k3);//balance
 }
 
 template <typename T>
-void DSAVLTree<T>::doubleRight(Node<T>*& k1)
-{
-    leftRotate(k1->getRight());
-    rightRotate(k1);
+void DSAVLTree<T>::doubleRight(Node<T>*& k1)//case 2 (RL)
+{//insertion into right subtree of left child of alpha
+    //rotate left child of alpha with its right child
+    leftRotate(k1->getRight());//turn into case 1
+    //rotate alpha with its left child
+    rightRotate(k1);//balance
 }
 
 template <typename T>
