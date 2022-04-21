@@ -20,6 +20,7 @@ private:
     DSAVLTree<Word> people;
 
 public:
+    QueryProcessor();
     QueryProcessor(DSAVLTree<Word>& w, DSAVLTree<Word>& o, DSAVLTree<Word>& p);
     void parseQuery(string& query);//parse query
     void setUnion(vector<Document>& a, vector<Document>& b);//OR keyword

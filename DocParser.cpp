@@ -16,7 +16,7 @@ DocParser::DocParser()
 }
 
 void DocParser::parse(const string& filename) {
-//    cout << "NEW DOC: " << filename << endl;
+    cout << "NEW DOC: " << filename << endl;
     //TODO parse for org and person, put unique ones into avl tree
     //parse main text
     rapidjson::Document doc;
@@ -45,12 +45,13 @@ void DocParser::parse(const string& filename) {
     string text = doc["text"].GetString();
 //    cout << "text: " << text << endl;
 
-    int space = text.find(" ");
+    int space;
     while (space != -1)
     {
-//        cout << "text: " << text << endl;
+//        text = text.substr(space);//cut off curr word
+        space = text.find(" ");
         Word curr(text.substr(0, space));
-        cout << curr.getStr() << endl;
+//        cout << "current: " << curr.getStr() << endl;
         curr.toLower();//remove caps
         if (isStopWord(curr.getStr())){
             text = text.substr(space + 1);//cut off curr word
@@ -59,21 +60,19 @@ void DocParser::parse(const string& filename) {
         }
         curr.removePunc();//remove punctuation
         curr.stemming();
-        cout << "current: " << curr.getStr() << endl;
+//        cout << "current: " << curr.getStr() << endl;
         //put unique words into the avl tree
 
         if (!words.contains(curr)){//if the word is not already in the tree/new unique word
-            curr.incrFreq(currDoc);//TODO combine contains and find
+            curr.incrFreq(currDoc);
             words.insert(curr);
-            cout << "inserted " << curr.getStr() << endl;
+//            cout << "inserted " << curr.getStr() << endl;
         }
         else{
             words.find(words.getRoot(), curr).incrFreq(currDoc);//index document on object in tree
 //            curr.incrFreq(currDoc);//indexes a temporary variable, not the actual Word object in the tree
         }
         text = text.substr(space + 1);//cut off curr word
-        space = text.find(" ");
-//        cout << "root: " << words.getRoot()->getData().getStr() << endl;
     }
 }
 

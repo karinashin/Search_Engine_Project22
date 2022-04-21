@@ -87,3 +87,8 @@ void Word::incrFreq(Document& doc)
 
 vector<int>& Word::getFrequency() { return frequency; }
 int Word::getTotal() { return total; }
+std::ostream& operator<< (std::ostream& out, const Word& w)
+{
+    out << w.str;
+    return out;
+}
