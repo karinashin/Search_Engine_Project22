@@ -9,17 +9,50 @@
 
 using namespace std;
 int main(int argc, char** argv) {
-//    DocParser parse;
-//    cout << "parsing..." << endl;
-//    parse.getFiles(argv[2]);//absolute path
-//    cout << "done!" << endl;
-//    Word w(argv[1]);//search term
-//    w.stemming();
-//    parse.getWordTree().find(parse.getWordTree().getRoot(), w).printDocs();
+    //TODO move stop words list to main so that it can be used in all classes
+//    DSAVLTree<string> stops;
+//    ifstream stop;//make the stop words AVL tree
+//    stop.open("stopWords.txt");
+//    string curr;
+//    while (getline(stop, curr))//make an avl tree of stop words
+//    {
+//        string s = curr.substr(0, curr.length()-1);//cut off end char
+//        stops.insert(s);
+//    }
+    DocParser parse;
+    cout << "parsing..." << endl;
+    parse.getFiles(argv[2]);//absolute path
+    cout << "done!" << endl;
+    Word w(argv[1]);//search term
+    w.stemming();
+    parse.getWordTree().find(parse.getWordTree().getRoot(), w).printDocs();
 
-    QueryProcessor q;
-    string see = "OR facebook instagram NOT bankruptcy ORG snap PERSON cramer";
-    q.parseQuery(see);
+//    QueryProcessor q;
+//    string see = "OR facebook instagram NOT bankruptcy ORG snap PERSON cramer";
+//    q.parseQuery(see);
+
+
+//    rapidjson::Document doc;
+
+//    ifstream stream;
+//    stream.open("subset/blogs_0000002.json");
+//    if (!stream.is_open())
+//        cout << "oh no" << endl;
+//
+//    string wholeFile;
+//    string temp;
+//    while (getline(stream, temp))
+//        wholeFile += temp;
+//
+//    stream.close();
+//
+//    doc.Parse(wholeFile.c_str());
+//    for (auto &v : doc["entities"]["organizations"].GetArray ()) {//ORGS
+//        for (auto &curr : v.GetArray())
+//        {
+//            cout << "name: " << curr["name"].GetString() << endl;
+//        }
+//    }
 
 //    DSAVLTree<Word> num;
 //    Word a("a");

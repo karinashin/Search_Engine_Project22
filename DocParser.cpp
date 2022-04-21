@@ -15,6 +15,11 @@ DocParser::DocParser()
     }
 }
 
+DocParser::DocParser(DSAVLTree<string>& stopWords)
+{
+    //TODO
+}
+
 void DocParser::parse(const string& filename) {
     cout << "NEW DOC: " << filename << endl;
     //TODO parse for org and person, put unique ones into avl tree
@@ -27,7 +32,7 @@ void DocParser::parse(const string& filename) {
 
     string wholeFile;
     string temp;
-    while (getline(stream, temp))//not reading anything
+    while (getline(stream, temp))
         wholeFile += temp;
 
     stream.close();
@@ -36,17 +41,17 @@ void DocParser::parse(const string& filename) {
     if (!doc.IsObject()) cout << "somethings wrong" << endl;
 
     //make Document object for current file
-//    string title = doc["title"].GetString(); TODO add back later
-//    string pub = doc["thread"]["published"].GetString();
-//    string date;
+    string title = doc["title"].GetString();
+    string date = doc["thread"]["published"].GetString();
     string id = doc["uuid"].GetString();
-    Document currDoc(filename, id);
+    string pub = doc["thread"]["site"].GetString();//TODO wheres the pub? this is the site name
+
+    Document currDoc(title, pub, date, filename, id);
 
     string text = doc["text"].GetString();
-//    cout << "text: " << text << endl;
 
     int space;
-    while (space != -1)
+    while (space != -1)//WORDS
     {
 //        text = text.substr(space);//cut off curr word
         space = text.find(" ");
