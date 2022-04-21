@@ -13,13 +13,13 @@ Word::Word(string word)
     str = word;
 }
 
-Word& Word::operator=(const Word& w)
-{
-    str = w.str;
-    docs = w.docs;
-    frequency = w.frequency;
-    total = w.total;
-}
+//Word& Word::operator=(const Word& w)
+//{
+//    str = w.str;
+//    docs = w.docs;
+//    frequency = w.frequency;
+//    total = w.total;
+//}
 
 bool Word::operator<(const Word& w)
 {
@@ -57,7 +57,7 @@ void Word::removePunc()
 
 void Word::stemming()
 {
-    Porter2Stemmer::trim(str);//TODO error undefined reference
+    Porter2Stemmer::trim(str);
     Porter2Stemmer::stem(str);
 }
 

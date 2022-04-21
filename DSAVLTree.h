@@ -219,6 +219,7 @@ void DSAVLTree<T>::insert(T& x)//public
 template <typename T>
 bool DSAVLTree<T>::contains(Node<T>* n, T& val)
 {
+    std::cout << "contains function" << std::endl;
     if (n == nullptr)
         return false;
     else if (n->getData() == val)
@@ -232,6 +233,7 @@ bool DSAVLTree<T>::contains(Node<T>* n, T& val)
 template <typename T>
 void DSAVLTree<T>::insert(Node<T>*& n, T& val)//private
 {
+    std::cout << "insert function" << std::endl;
     if (n == nullptr){//tree is empty or at the end of a leaf
         n = new Node<T>(val);//make new node to insert
     }
@@ -259,6 +261,7 @@ T& DSAVLTree<T>::find(Node<T>* node, T& val)//TODO add an edge case for when the
 template <typename T>
 void DSAVLTree<T>::balanceTree(Node<T>*& node)
 {
+    std::cout << "balance function" << std::endl;
     if (node == nullptr)
         return;
     if (height(node->getLeft()) - height(node->getRight()) > 1){//Case 1 or 2
@@ -279,6 +282,7 @@ void DSAVLTree<T>::balanceTree(Node<T>*& node)
 template <typename T>
 void DSAVLTree<T>::rightRotate(Node<T>*& k1)//case 4 (RR), k1 = alpha
 {
+    std::cout << "right" << std::endl;
     Node<T>* k2 = k1->getRight();//rotation with right child, k2 = k1's right child
     k1->setRight(k2->getLeft());//alpha/k1's right is set to its left child's left
     k2->setLeft(k1);//k2's left now points to alpha/k1 (reassign)
@@ -291,6 +295,7 @@ void DSAVLTree<T>::rightRotate(Node<T>*& k1)//case 4 (RR), k1 = alpha
 template <typename T>
 void DSAVLTree<T>::leftRotate(Node<T>*& k2)//case 1 (LL), k2 = alpha
 {
+    std::cout << "left rotate" << std::endl;
     Node<T>* k1 = k2->getLeft();//rotation with left child, k1 = left child
     k2->getLeft() = k1->getRight();//alpha/k2's left is set to its left child's right
     k1->setRight(k2);//now that alpha points to k1's right, k1's right points to alpha

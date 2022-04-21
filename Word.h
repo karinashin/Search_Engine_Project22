@@ -25,7 +25,7 @@ private:
 public:
     Word();
     Word(string word);
-    Word& operator=(const Word& w);
+//    Word& operator=(const Word& w);//SEG FAULT
     bool operator<(const Word& w);
     bool operator==(const Word& w);
 

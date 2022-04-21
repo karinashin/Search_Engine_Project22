@@ -50,6 +50,7 @@ void DocParser::parse(const string& filename) {
     {
 //        cout << "text: " << text << endl;
         Word curr(text.substr(0, space));
+        cout << curr.getStr() << endl;
         curr.toLower();//remove caps
         if (isStopWord(curr.getStr())){
             text = text.substr(space + 1);//cut off curr word
@@ -58,13 +59,13 @@ void DocParser::parse(const string& filename) {
         }
         curr.removePunc();//remove punctuation
         curr.stemming();
-//        cout << "current: " << curr.getStr() << endl;
+        cout << "current: " << curr.getStr() << endl;
         //put unique words into the avl tree
 
         if (!words.contains(curr)){//if the word is not already in the tree/new unique word
             curr.incrFreq(currDoc);//TODO combine contains and find
             words.insert(curr);
-//            cout << "inserted " << curr.getStr() << endl;
+            cout << "inserted " << curr.getStr() << endl;
         }
         else{
             words.find(words.getRoot(), curr).incrFreq(currDoc);//index document on object in tree

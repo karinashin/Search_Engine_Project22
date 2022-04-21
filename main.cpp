@@ -9,9 +9,9 @@
 using namespace std;
 int main(int argc, char** argv) {
     DocParser parse;
-//    cout << "parsing..." << endl;
+    cout << "parsing..." << endl;
     parse.getFiles(argv[2]);//absolute path
-//    cout << "done!" << endl;
+    cout << "done!" << endl;
 //    cout << parse.getWordTree().getRoot()->getData().getStr() << endl;
 //    cout << parse.getWordTree().getCount();
 //    Word w("investors");
