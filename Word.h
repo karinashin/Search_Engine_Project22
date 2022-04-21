@@ -25,9 +25,11 @@ private:
 public:
     Word();
     Word(string word);
-    void sort();//sorts documents by index (doc with largest freq. goes first)
+    Word& operator=(const Word& w);
     bool operator<(const Word& w);
     bool operator==(const Word& w);
+
+    void sort();//sorts documents by index (doc with largest freq. goes first)
     void toLower();
     void removePunc();
 //    bool isStopWord();

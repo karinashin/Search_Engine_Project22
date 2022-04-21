@@ -13,6 +13,14 @@ Word::Word(string word)
     str = word;
 }
 
+Word& Word::operator=(const Word& w)
+{
+    str = w.str;
+    docs = w.docs;
+    frequency = w.frequency;
+    total = w.total;
+}
+
 bool Word::operator<(const Word& w)
 {
     if (str < w.str)
@@ -46,20 +54,6 @@ void Word::removePunc()
     }
     str = buffer;
 }
-
-//bool Word::isStopWord()
-//{
-//    DSAVLTree<string> stops;
-//    ifstream stop;
-//    stop.open("stopWords.txt");
-//    string curr;
-//    while (getline(stop, curr))//make an avl tree of stop words
-//    {
-//        string s = curr.substr(0, curr.length()-1);//cut off end char
-//        stops.insert(s);
-//    }
-//    return stops.contains(str);//if str is in the avl tree, its a stop word
-//}
 
 void Word::stemming()
 {

@@ -246,7 +246,7 @@ void DSAVLTree<T>::insert(Node<T>*& n, T& val)//private
 }
 
 template <typename T>
-T& DSAVLTree<T>::find(Node<T>* node, T& val)
+T& DSAVLTree<T>::find(Node<T>* node, T& val)//TODO add an edge case for when the word is not found
 {
     if (node->getData() == val)
         return node->getData();
