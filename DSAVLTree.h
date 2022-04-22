@@ -130,6 +130,7 @@ public:
     void insert(T& x);//TODO doesn't accept an int
     bool contains(T& val) { return contains(root, val); }
     T& find(Node<T>* node, T& val);//given a value, find the matching object in the tree
+//    Node<T>*& find(Node<T>* node, T& val);//iterative
 
     void balanceTree(Node<T>*& node);//balance the tree using right/left rotate
     void rightRotate(Node<T>*& k1);
@@ -257,6 +258,25 @@ T& DSAVLTree<T>::find(Node<T>* node, T& val)//TODO add an edge case for when the
     else
         return find(node->getRight(), val);
 }
+//Node<T>*& DSAVLTree<T>::find(Node<T>* node, T& val)//iterative TODO seg fault
+//{
+//    Node<T>* empty;
+//    std::cout << "find function" << std::endl;
+//    if (node == nullptr)
+//        return empty;
+//    while (node != nullptr)
+//    {
+//        std::cout << "while loop" << std::endl;
+//        if (node->getData() == val){
+//            return node;
+//        }
+//        else if (val < node->getData())
+//            node = node->getLeft();
+//        else
+//            node = node->getRight();
+//    }
+//    return empty;
+//}
 
 template <typename T>
 void DSAVLTree<T>::balanceTree(Node<T>*& node)

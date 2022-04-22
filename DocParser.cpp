@@ -77,6 +77,14 @@ void DocParser::parse(const string& filename) {
             words.find(words.getRoot(), curr).incrFreq(currDoc);//index document on object in tree
 //            curr.incrFreq(currDoc);//indexes a temporary variable, not the actual Word object in the tree
         }
+//        std::cout << curr << std::endl;
+//        Node<Word>*& found = words.find(words.getRoot(), curr);
+//        if (found->getLeft() == nullptr && found->getRight() == nullptr && !(found->getData() == curr)){//curr is not in tree
+//            cout << "seg fault" << endl;
+//            words.insert(curr);
+//        }
+//        curr.incrFreq(currDoc);
+
         text = text.substr(space + 1);//cut off curr word
     }
 }
@@ -96,6 +104,7 @@ void DocParser::getFiles(const string& directory)
 vector<Document>& DocParser::findIndex(Word& obj)
 {
     return words.find(words.getRoot(), obj).getDocs();
+//    return words.find(words.getRoot(), obj)->getData().getDocs();
 }
 
 bool DocParser::isStopWord(string& str)

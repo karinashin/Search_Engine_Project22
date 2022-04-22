@@ -26,6 +26,7 @@ int main(int argc, char** argv) {
     Word w(argv[1]);//search term
     w.stemming();
     parse.getWordTree().find(parse.getWordTree().getRoot(), w).printDocs();
+//    parse.getWordTree().find(parse.getWordTree().getRoot(), w)->getData().printDocs();
 
 //    QueryProcessor q;
 //    string see = "OR facebook instagram NOT bankruptcy ORG snap PERSON cramer";
