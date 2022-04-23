@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <algorithm>
 #include "include/rapidjson/document.h"
 #include "DocParser.h"
 #include "DSAVLTree.h"
@@ -19,64 +20,44 @@ int main(int argc, char** argv) {
 //        string s = curr.substr(0, curr.length()-1);//cut off end char
 //        stops.insert(s);
 //    }
-    DocParser parse;
-    cout << "parsing..." << endl;
-    parse.getFiles(argv[2]);//absolute path
-    cout << "done!" << endl;
-    Word w(argv[1]);//search term
-    w.stemming();
-    parse.getWordTree().find(parse.getWordTree().getRoot(), w).printDocs();
+//    DocParser parse;
+//    cout << "parsing..." << endl;
+//    parse.getFiles(argv[2]);//absolute path
+//    cout << "done!" << endl;
+//    Word w(argv[1]);//search term
+//    w.stemming();
+//    parse.getWordTree().find(parse.getWordTree().getRoot(), w).printDocs();
 //    parse.getWordTree().find(parse.getWordTree().getRoot(), w)->getData().printDocs();
 
-//    QueryProcessor q;
-//    string see = "OR facebook instagram NOT bankruptcy ORG snap PERSON cramer";
-//    q.parseQuery(see);
+    vector<int> finalIndex;
+    finalIndex.push_back(4);
+    finalIndex.push_back(10);
+    finalIndex.push_back(1);
 
+    vector<int> a;
+    a.push_back(5);
+    a.push_back(2);
+//    a.push_back(4);
+//    a.push_back(1);
+    a.push_back(3);
 
-//    rapidjson::Document doc;
+    vector<int> b;
+    b.push_back(10);
+    b.push_back(25);
+    b.push_back(32);
 
-//    ifstream stream;
-//    stream.open("subset/blogs_0000002.json");
-//    if (!stream.is_open())
-//        cout << "oh no" << endl;
-//
-//    string wholeFile;
-//    string temp;
-//    while (getline(stream, temp))
-//        wholeFile += temp;
-//
-//    stream.close();
-//
-//    doc.Parse(wholeFile.c_str());
-//    for (auto &v : doc["entities"]["organizations"].GetArray ()) {//ORGS
-//        for (auto &curr : v.GetArray())
-//        {
-//            cout << "name: " << curr["name"].GetString() << endl;
-//        }
-//    }
+    vector<int> temp;
+    for (int i = 0; i < finalIndex.size(); i++)
+    {
+        cout << "loop running" << endl;
+        vector<int>::iterator it = find(a.begin(), a.end(), finalIndex.at(i));
+        if (it != a.end())//doc of a exists in final
+            temp.push_back(finalIndex.at(i));
+    }
+    finalIndex = temp;
 
-//    DSAVLTree<Word> num;
-//    Word a("a");
-//    Word b("b");
-//    Word c("c");
-//    Word d("d");
-//    Word e("e");
-//    Word f("f");
-//
-//    num.insert(c);
-//    num.insert(a);
-//    num.insert(b);
-//    num.insert(e);
-//    num.insert(d);
-//    num.insert(f);
-
-//    string text = "Hello this is a sentence with GIRAFFES";
-//    int space;//index of space character
-//    while (space != -1)
-//    {
-//        space = text.find(" ");
-//        Word curr(text.substr(0, space));
-//        cout << "current: " << curr.getStr() << endl;
-//        text = text.substr(space + 1);//cut off curr word
-//    }
+    for (int j = 0; j < finalIndex.size(); j++)
+        cout << finalIndex.at(j) << endl;
+    if (finalIndex.size() == 0)
+        cout << "final is empty" <<endl;
 }

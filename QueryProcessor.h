@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "Document.h"
 #include "DSAVLTree.h"
 #include "Word.h"
@@ -24,8 +25,9 @@ public:
     QueryProcessor(DSAVLTree<Word>& w, DSAVLTree<Word>& o, DSAVLTree<Word>& p);
     void parseQuery(string& query);//parse query
     void setUnion(vector<Document>& a, vector<Document>& b);//OR keyword
-    void intersection(vector<Document>& a, vector<Document>& b);//AND keyword
+    void intersection(vector<Document>& a, vector<Document>&b);//AND keyword
     void complement(vector<Document>& a);//set subtraction
+    void addPersonOrg(vector<Document>& a);//remove any docs that don't include the given person or org
 };
 
 
