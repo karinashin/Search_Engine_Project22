@@ -20,11 +20,13 @@ void QueryProcessor::parseQuery(string& query)//parse query
     {
         space = query.find(" ");
         string curr = query.substr(0, space);
+        //TODO remove stop words and stem
 
         if (curr == "AND" || curr == "OR"){//2 arg operators
             query = query.substr(space + 1);//cut off operator
             space = query.find(" ");
             Word word1(query.substr(0, space));//guaranteed to have first word
+            word1.stemming();
             std::cout << word1.getStr() << std::endl;
             query = query.substr(space + 1);//cut off operator
             space = query.find(" ");//find next word
@@ -37,6 +39,7 @@ void QueryProcessor::parseQuery(string& query)//parse query
                 word2 = query;//second word is rest of query
                 query = "";//empty query
             }
+            word2.stemming();
             std::cout << word2.getStr() << std::endl;
 
             if (curr == "AND"){//perform corresponding set operation
@@ -60,6 +63,7 @@ void QueryProcessor::parseQuery(string& query)//parse query
                 word1 = query;//second word is rest of query
                 query = "";//empty query
             }
+            word1.stemming();
             std::cout << word1 << std::endl;
             std::cout << "complement" << std::endl;
             complement(words.find(words.getRoot(), word1).getDocs());
@@ -76,6 +80,7 @@ void QueryProcessor::parseQuery(string& query)//parse query
                 org = query;//second word is rest of query
                 query = "";//empty query
             }
+            org.stemming();
             std::cout << org << std::endl;
             std::cout << "org intersection" << std::endl;
             addPersonOrg(orgs.find(orgs.getRoot(), org).getDocs());
@@ -93,12 +98,14 @@ void QueryProcessor::parseQuery(string& query)//parse query
                 person = query;//second word is rest of query
                 query = "";//empty query
             }
+            person.stemming();
             std::cout << person << std::endl;
             std::cout << "person intersection" << std::endl;
             addPersonOrg(people.find(people.getRoot(), person).getDocs());//index has to include only those that have this person
         }
         else{//just a term
             Word term(curr);
+            term.stemming();
             std::cout << term << std::endl;
             std::cout << "standard union" << std::endl;
             setUnion(finalIndex, words.find(words.getRoot(), term).getDocs());
@@ -162,7 +169,7 @@ void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from fin
     {
         vector<Document>::iterator it = find(a.begin(), a.end(), finalIndex.at(i));
         if (it != a.end())//doc of a exists in final
-            temp.push_back(finalIndex.at(i));//TODO idk how to remove finalIndex.at(i) within an iterator/making a temp vector
+            temp.push_back(finalIndex.at(i));
     }
     finalIndex = temp;
 }

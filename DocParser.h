@@ -29,6 +29,7 @@ public:
     DocParser();
     DocParser(DSAVLTree<string>& stopWords);
     void parse(const string& filename);//parse the documents and create 3 AVLTrees
+//    void parse(DSAVLTree<Word>& words, DSAVLTree<Word> orgs, DSAVLTree<Word> people);
     void getFiles(const string& directory);//returns filenames for traversal through directory
     vector<Document>& findIndex(Word& obj);//return the document index of a given Word object
     bool isStopWord(string& str);
