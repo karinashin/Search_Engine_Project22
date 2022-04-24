@@ -68,8 +68,10 @@ void Word::printDocs()
 {
     for (int i = 0; i < docs.size(); i++)
     {
-        cout << docs.at(i).getID() << endl;
+//        cout << docs.at(i).getID() << endl;
+        cout << docs.at(i).getPath() << endl;
     }
+    cout << endl;
 }
 
 void Word::incrFreq(Document& doc)

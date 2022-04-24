@@ -13,11 +13,12 @@ void QueryProcessor::parseQuery(string& query, DSAVLTree<Word>& words, DSAVLTree
     while (space != -1)
     {
         space = query.find(" ");
-        string curr = query.substr(0, space);
-        if (stop.isStopWord(curr))
+        Word curr(query.substr(0, space));
+        curr.toLower();
+        if (specialStopCheck(stop, curr.getStr()))
             continue;//skip stop words
 
-        if (curr == "AND" || curr == "OR"){//2 arg operators
+        if (curr.getStr() == "and" || curr.getStr() == "or"){//2 arg operators
             query = query.substr(space + 1);//cut off operator
             space = query.find(" ");
             Word word1(query.substr(0, space));//guaranteed to have first word
@@ -37,7 +38,7 @@ void QueryProcessor::parseQuery(string& query, DSAVLTree<Word>& words, DSAVLTree
             word2.stemming();
             std::cout << word2.getStr() << std::endl;
 
-            if (curr == "AND"){//perform corresponding set operation
+            if (curr.getStr() == "and"){//perform corresponding set operation
                 std::cout << "intersection" << std::endl;
                 intersection(words.find(words.getRoot(), word1).getDocs(), words.find(words.getRoot(), word2).getDocs());
             }
@@ -46,7 +47,7 @@ void QueryProcessor::parseQuery(string& query, DSAVLTree<Word>& words, DSAVLTree
                 setUnion(words.find(words.getRoot(), word1).getDocs(), words.find(words.getRoot(), word2).getDocs());
             }
         }
-        else if (curr == "NOT"){
+        else if (curr.getStr() == "not"){
             query = query.substr(space + 1);//cut off operator
             space = query.find(" ");
             Word word1;
@@ -63,7 +64,7 @@ void QueryProcessor::parseQuery(string& query, DSAVLTree<Word>& words, DSAVLTree
             std::cout << "complement" << std::endl;
             complement(words.find(words.getRoot(), word1).getDocs());
         }
-        else if (curr == "ORG"){
+        else if (curr.getStr() == "org"){
             query = query.substr(space + 1);//cut off operator
             space = query.find(" ");
             Word org;
@@ -81,7 +82,7 @@ void QueryProcessor::parseQuery(string& query, DSAVLTree<Word>& words, DSAVLTree
             addPersonOrg(orgs.find(orgs.getRoot(), org).getDocs());
             //org.getDocs() returns index where this org appears
         }
-        else if (curr == "PERSON"){
+        else if (curr.getStr() == "person"){
             query = query.substr(space + 1);//cut off operator
             space = query.find(" ");
             Word person;
@@ -167,4 +168,13 @@ void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from fin
             temp.push_back(finalIndex.at(i));
     }
     finalIndex = temp;
+}
+
+bool QueryProcessor::specialStopCheck(StopWord& stop, string& word)
+{
+    if (word == "AND" || word == "OR" || word == "NOT")//exclude key words
+        return false;
+    else if (stop.isStopWord(word))
+        return true;
+    return false;
 }

@@ -34,7 +34,32 @@ void DocParser::parse(const string& filename, StopWord& stop) {
     string id = doc["uuid"].GetString();
     string pub = doc["thread"]["site"].GetString();//TODO wheres the pub? this is the site name
 
-    Document currDoc(title, pub, date, filename, id);
+    Document currDoc(title, pub, date, filename, id);//make doc object for this file
+
+    //checks
+    doc["entities"].IsObject();
+    doc["entities"].IsArray();
+
+    for (auto &v : doc["entities"]["persons"].GetArray()) {//parse for person
+        Word person(v["name"].GetString());
+        if (!people.contains(person)){//if the word is not already in the tree/new unique word
+            person.incrFreq(currDoc);
+            people.insert(person);
+        }
+        else{
+            people.find(people.getRoot(), person).incrFreq(currDoc);//index document on object in tree
+        }
+    }
+    for (auto &v : doc["entities"]["organizations"].GetArray()) {//parse for orgs
+        Word o(v["name"].GetString());
+        if (!orgs.contains(o)){//if the word is not already in the tree/new unique word
+            o.incrFreq(currDoc);
+            orgs.insert(o);
+        }
+        else{
+            orgs.find(orgs.getRoot(), o).incrFreq(currDoc);//index document on object in tree
+        }
+    }
 
     string text = doc["text"].GetString();
 

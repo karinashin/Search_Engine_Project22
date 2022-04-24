@@ -18,9 +18,6 @@ class QueryProcessor {
 private:
 //    string query;
     vector<Document> finalIndex;
-//    DSAVLTree<Word> words;//TODO these are only another vesion of the trees, won't actually have the indexes in them
-//    DSAVLTree<Word> orgs;
-//    DSAVLTree<Word> people;
 
 public:
     QueryProcessor();
@@ -29,6 +26,8 @@ public:
     void intersection(vector<Document>& a, vector<Document>&b);//AND keyword
     void complement(vector<Document>& a);//set subtraction
     void addPersonOrg(vector<Document>& a);//remove any docs that don't include the given person or org
+
+    bool specialStopCheck(StopWord& stop, string& word);
 };
 
 

@@ -28,7 +28,8 @@ private:
 
 public:
     DocParser();
-    void parse(const string& filename, StopWord& stop);//parse the documents and create 3 AVLTrees
+    void parse(const string& filename, StopWord& stop);//parse the documents for unique words
+    void parseOrgPerson(const string& filename, Document& d);//parse doc for orgs and persons
     void getFiles(const string& directory, StopWord& stop);//returns filenames for traversal through directory
     void persistenceIndex();//read in persistence file to index words
 
