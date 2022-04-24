@@ -12,19 +12,19 @@
 #include "DSAVLTree.h"
 #include "Word.h"
 #include "StopWord.h"
+#include "DocParser.h"
 
 class QueryProcessor {
 private:
 //    string query;
     vector<Document> finalIndex;
-    DSAVLTree<Word> words;
-    DSAVLTree<Word> orgs;
-    DSAVLTree<Word> people;
+//    DSAVLTree<Word> words;//TODO these are only another vesion of the trees, won't actually have the indexes in them
+//    DSAVLTree<Word> orgs;
+//    DSAVLTree<Word> people;
 
 public:
     QueryProcessor();
-    QueryProcessor(DSAVLTree<Word>& w, DSAVLTree<Word>& o, DSAVLTree<Word>& p);
-    void parseQuery(string& query, StopWord& stop);//parse query
+    void parseQuery(string& query, DSAVLTree<Word>& words, DSAVLTree<Word>& orgs, DSAVLTree<Word>& people, StopWord& stop);//parse query
     void setUnion(vector<Document>& a, vector<Document>& b);//OR keyword
     void intersection(vector<Document>& a, vector<Document>&b);//AND keyword
     void complement(vector<Document>& a);//set subtraction

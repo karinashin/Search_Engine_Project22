@@ -24,20 +24,24 @@ private:
     DSAVLTree<Word> words;
     DSAVLTree<Word> orgs;
     DSAVLTree<Word> people;
+    int numDocs = 0;
 
 public:
     DocParser();
     void parse(const string& filename, StopWord& stop);//parse the documents and create 3 AVLTrees
     void getFiles(const string& directory, StopWord& stop);//returns filenames for traversal through directory
-    vector<Document>& findIndex(Word& obj);//return the document index of a given Word object
+    void persistenceIndex();//read in persistence file to index words
 
-    vector<Document>& findWordIndex(Word& w);
-    vector<Document>& findOrgIndex(Word& org);
-    vector<Document>& findPersonIndex(Word& p);
+//    vector<Document>& findIndex(Word& obj);//return the document index of a given Word object
+//    vector<Document>& findWordIndex(Word& w);
+//    vector<Document>& findOrgIndex(Word& org);
+//    vector<Document>& findPersonIndex(Word& p);
 
     DSAVLTree<Word>& getWordTree();
     DSAVLTree<Word>& getOrgTree();
     DSAVLTree<Word>& getPersonTree();
+
+    int getNumDocs();
 };
 
 

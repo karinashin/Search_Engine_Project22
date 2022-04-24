@@ -5,14 +5,8 @@
 #include "QueryProcessor.h"
 
 QueryProcessor::QueryProcessor(){}
-QueryProcessor::QueryProcessor(DSAVLTree<Word>& w, DSAVLTree<Word>& o, DSAVLTree<Word>& p)
-{
-//    words = w;//TODO error
-//    orgs = o;
-//    people = p;
-}
 
-void QueryProcessor::parseQuery(string& query, StopWord& stop)//parse query
+void QueryProcessor::parseQuery(string& query, DSAVLTree<Word>& words, DSAVLTree<Word>& orgs, DSAVLTree<Word>& people, StopWord& stop)//parse query
 {
     std::cout << "NEW QUERY: " << query << std::endl;
     int space;

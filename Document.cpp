@@ -3,14 +3,14 @@
 //
 
 #include "Document.h"
-Document::Document(string file, string id)
-{
-    title = "";
-    publication = "";
-    date = "";
-    filePath = file;
-    uuid = id;
-}
+//Document::Document(string file, string id)
+//{
+//    title = "";
+//    publication = "";
+//    date = "";
+//    filePath = file;
+//    uuid = id;
+//}
 
 Document::Document(string t, string p, string d, string f, string id)
 {

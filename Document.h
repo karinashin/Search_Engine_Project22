@@ -17,7 +17,7 @@ private:
     string uuid;
 
 public:
-    Document(string file, string id);//temp for timing demo
+//    Document(string file, string id);//temp for timing demo
     Document(string t, string p, string d, string f, string id);
 
     bool operator==(const Document& d);

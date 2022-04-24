@@ -11,23 +11,27 @@
 #include "Word.h"
 #include "Document.h"
 #include "StopWord.h"
+#include "include/rapidjson/document.h"
+
+using namespace std;
 
 class UserInterface {
 private:
     DocParser docReader;
     QueryProcessor process;
     StopWord stops;
-
-    DSAVLTree<Word> words;
-    DSAVLTree<Word> orgs;
-    DSAVLTree<Word> persons;
+    int totalArticle;//total number of articles indexed
+//    DSAVLTree<Word> words;
+//    DSAVLTree<Word> orgs;
+//    DSAVLTree<Word> persons;
 
 public:
     UserInterface();
     void clearIndex();//delete every tree
     void parseDocs(const string& direct);//parse all documents
-    void persistentIndex();//read in persistence file to index words
     void enterQuery(string& query);
+    void displayResults();
+    void showText(Document& d);
     void stats();
     DocParser& getDocParser();//used to access word/org/person avl trees
 };

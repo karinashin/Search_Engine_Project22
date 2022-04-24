@@ -7,7 +7,10 @@ DocParser::DocParser() {}
 
 void DocParser::parse(const string& filename, StopWord& stop) {
     cout << "NEW DOC: " << filename << endl;
+    numDocs++;
+
     //TODO parse for org and person, put unique ones into avl tree
+    //TODO write to persistence file
     //parse main text
     rapidjson::Document doc;
 
@@ -86,16 +89,23 @@ void DocParser::getFiles(const string& directory, StopWord& stop)
     }
 }
 
-vector<Document>& DocParser::findIndex(Word& obj)
+void DocParser::persistenceIndex()//read in persistence file to index words
 {
-    return words.find(words.getRoot(), obj).getDocs();
-//    return words.find(words.getRoot(), obj)->getData().getDocs();
+
 }
 
-vector<Document>& DocParser::findWordIndex(Word& w) { return w.getDocs(); }
-vector<Document>& DocParser::findOrgIndex(Word& org) { return org.getDocs(); }
-vector<Document>& DocParser::findPersonIndex(Word& p) {return p.getDocs(); }
+//vector<Document>& DocParser::findIndex(Word& obj)
+//{
+//    return words.find(words.getRoot(), obj).getDocs();
+////    return words.find(words.getRoot(), obj)->getData().getDocs();
+//}
+
+//vector<Document>& DocParser::findWordIndex(Word& w) { return w.getDocs(); }
+//vector<Document>& DocParser::findOrgIndex(Word& org) { return org.getDocs(); }
+//vector<Document>& DocParser::findPersonIndex(Word& p) {return p.getDocs(); }
 
 DSAVLTree<Word>& DocParser::getWordTree() { return words; }
 DSAVLTree<Word>& DocParser::getOrgTree() { return orgs; }
 DSAVLTree<Word>& DocParser::getPersonTree() { return people; }
+
+int DocParser::getNumDocs() { return numDocs; }
