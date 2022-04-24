@@ -4,17 +4,7 @@
 
 #include "UserInterface.h"
 
-UserInterface::UserInterface()
-{
-    ifstream stop;//make the stop words AVL tree
-    stop.open("stopWords.txt");
-    string curr;
-    while (getline(stop, curr))//make an avl tree of stop words
-    {
-        string s = curr.substr(0, curr.length()-1);//cut off end char
-        stops.insert(s);
-    }
-}
+UserInterface::UserInterface() {}
 
 void UserInterface::clearIndex()
 {
@@ -24,10 +14,10 @@ void UserInterface::clearIndex()
     //TODO also erase contents of persistence file?
 }
 
-void UserInterface::parseDocs(string& direct)
+void UserInterface::parseDocs(const string& direct)
 {
     std::cout << "parsing documents..." << std::endl;
-    docReader.parse(direct);
+    docReader.getFiles(direct, stops);
     std::cout << "done parsing!" << std::endl;
 }
 
@@ -38,10 +28,12 @@ void UserInterface::persistentIndex()
 
 void UserInterface::enterQuery(string& query)
 {
-    process.parseQuery(query);
+    process.parseQuery(query, stops);
 }
 
 void UserInterface::stats()
 {
 
 }
+
+DocParser& UserInterface::getDocParser() { return docReader; }

@@ -12,7 +12,7 @@ QueryProcessor::QueryProcessor(DSAVLTree<Word>& w, DSAVLTree<Word>& o, DSAVLTree
 //    people = p;
 }
 
-void QueryProcessor::parseQuery(string& query)//parse query
+void QueryProcessor::parseQuery(string& query, StopWord& stop)//parse query
 {
     std::cout << "NEW QUERY: " << query << std::endl;
     int space;
@@ -20,7 +20,8 @@ void QueryProcessor::parseQuery(string& query)//parse query
     {
         space = query.find(" ");
         string curr = query.substr(0, space);
-        //TODO remove stop words and stem
+        if (stop.isStopWord(curr))
+            continue;//skip stop words
 
         if (curr == "AND" || curr == "OR"){//2 arg operators
             query = query.substr(space + 1);//cut off operator

@@ -3,24 +3,9 @@
 //
 
 #include "DocParser.h"
-DocParser::DocParser()
-{
-    ifstream stop;//make the stop words AVL tree
-    stop.open("stopWords.txt");
-    string curr;
-    while (getline(stop, curr))//make an avl tree of stop words
-    {
-        string s = curr.substr(0, curr.length()-1);//cut off end char
-        stops.insert(s);
-    }
-}
+DocParser::DocParser() {}
 
-DocParser::DocParser(DSAVLTree<string>& stopWords)
-{
-    //TODO
-}
-
-void DocParser::parse(const string& filename) {
+void DocParser::parse(const string& filename, StopWord& stop) {
     cout << "NEW DOC: " << filename << endl;
     //TODO parse for org and person, put unique ones into avl tree
     //parse main text
@@ -58,7 +43,7 @@ void DocParser::parse(const string& filename) {
         Word curr(text.substr(0, space));
 //        cout << "current: " << curr.getStr() << endl;
         curr.toLower();//remove caps
-        if (isStopWord(curr.getStr())){
+        if (stop.isStopWord(curr.getStr())){
             text = text.substr(space + 1);//cut off curr word
             space = text.find(" ");
             continue;//don't add to tree
@@ -89,13 +74,13 @@ void DocParser::parse(const string& filename) {
     }
 }
 
-void DocParser::getFiles(const string& directory)
+void DocParser::getFiles(const string& directory, StopWord& stop)
 {
     for (const auto & entry : fs::recursive_directory_iterator(directory)){
         if (entry.is_regular_file()) {
             if (entry.path().extension().string() == ".json") {
                 string filename = entry.path().c_str();
-                parse(filename);
+                parse(filename, stop);
             }
         }
     }
@@ -105,11 +90,6 @@ vector<Document>& DocParser::findIndex(Word& obj)
 {
     return words.find(words.getRoot(), obj).getDocs();
 //    return words.find(words.getRoot(), obj)->getData().getDocs();
-}
-
-bool DocParser::isStopWord(string& str)
-{
-    return stops.contains(str);//if str is in the avl tree, its a stop word
 }
 
 vector<Document>& DocParser::findWordIndex(Word& w) { return w.getDocs(); }

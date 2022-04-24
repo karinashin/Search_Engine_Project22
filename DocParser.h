@@ -14,6 +14,7 @@
 #include "DSAVLTree.h"
 #include "Word.h"
 #include "include/rapidjson/document.h"
+#include "StopWord.h"
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -23,16 +24,12 @@ private:
     DSAVLTree<Word> words;
     DSAVLTree<Word> orgs;
     DSAVLTree<Word> people;
-    DSAVLTree<string> stops;
 
 public:
     DocParser();
-    DocParser(DSAVLTree<string>& stopWords);
-    void parse(const string& filename);//parse the documents and create 3 AVLTrees
-//    void parse(DSAVLTree<Word>& words, DSAVLTree<Word> orgs, DSAVLTree<Word> people);
-    void getFiles(const string& directory);//returns filenames for traversal through directory
+    void parse(const string& filename, StopWord& stop);//parse the documents and create 3 AVLTrees
+    void getFiles(const string& directory, StopWord& stop);//returns filenames for traversal through directory
     vector<Document>& findIndex(Word& obj);//return the document index of a given Word object
-    bool isStopWord(string& str);
 
     vector<Document>& findWordIndex(Word& w);
     vector<Document>& findOrgIndex(Word& org);

@@ -11,6 +11,7 @@
 #include "Document.h"
 #include "DSAVLTree.h"
 #include "Word.h"
+#include "StopWord.h"
 
 class QueryProcessor {
 private:
@@ -23,7 +24,7 @@ private:
 public:
     QueryProcessor();
     QueryProcessor(DSAVLTree<Word>& w, DSAVLTree<Word>& o, DSAVLTree<Word>& p);
-    void parseQuery(string& query);//parse query
+    void parseQuery(string& query, StopWord& stop);//parse query
     void setUnion(vector<Document>& a, vector<Document>& b);//OR keyword
     void intersection(vector<Document>& a, vector<Document>&b);//AND keyword
     void complement(vector<Document>& a);//set subtraction

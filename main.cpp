@@ -7,6 +7,7 @@
 #include "DSAVLTree.h"
 #include "Word.h"
 #include "QueryProcessor.h"
+#include "UserInterface.h"
 
 using namespace std;
 int main(int argc, char** argv) {
@@ -14,13 +15,13 @@ int main(int argc, char** argv) {
     //just have the avl tree indexes in the user interface class and then pass it everywhere else?
     //can't have multiple avl trees in each class (doc parser and query), should just have one set
     
-    DocParser parse;
+    UserInterface parse;
     cout << "parsing..." << endl;
-    parse.getFiles(argv[2]);//absolute path
+    parse.parseDocs(argv[2]);//absolute path
     cout << "done!" << endl;
     Word w(argv[1]);//search term
     w.stemming();
-    parse.getWordTree().find(parse.getWordTree().getRoot(), w).printDocs();
+    parse.getDocParser().getWordTree().find(parse.getDocParser().getWordTree().getRoot(), w).printDocs();
 //    parse.getWordTree().find(parse.getWordTree().getRoot(), w)->getData().printDocs();
 
 //    vector<int> finalIndex;
