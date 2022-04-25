@@ -32,11 +32,11 @@ bool Word::operator==(const Word& w)
 {
     return str == w.str;//if theyre the same string, theyre the same word
 }
-
-void Word::sort()
-{
-    //TODO
-}
+//
+//void Word::sort()
+//{
+//    //TODO
+//}
 
 void Word::toLower()
 {

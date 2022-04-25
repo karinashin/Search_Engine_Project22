@@ -11,11 +11,10 @@
 
 using namespace std;
 int main(int argc, char** argv) {
+    //TODO LIST: Rank indexes, make persistence file (figure out how to erase contents of file), figure out publication info, try to combine fine/contains
 
     UserInterface parse;
-    cout << "parsing..." << endl;
     parse.parseDocs(argv[2]);//absolute path
-    cout << "done!" << endl;
     Word w(argv[1]);//search term
     w.stemming();
 

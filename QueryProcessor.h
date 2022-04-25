@@ -16,8 +16,8 @@
 
 class QueryProcessor {
 private:
-//    string query;
-    vector<Document> finalIndex;
+    vector<Document> finalIndex;//list of documents that contains the query info
+    vector<int> finalFreq;//list of frequencies for each word in its documents for the entire query
 
 public:
     QueryProcessor();
@@ -26,8 +26,10 @@ public:
     void intersection(vector<Document>& a, vector<Document>&b);//AND keyword
     void complement(vector<Document>& a);//set subtraction
     void addPersonOrg(vector<Document>& a);//remove any docs that don't include the given person or org
-
+    void rankIndex();//rank the documents in the final index by relevancy/frecuency
     bool specialStopCheck(StopWord& stop, string& word);
+
+    vector<Document>& getFinal();
 };
 
 

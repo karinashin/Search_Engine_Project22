@@ -5,6 +5,7 @@
 #ifndef INC_22S_FINAL_PROJ_USERINTERFACE_H
 #define INC_22S_FINAL_PROJ_USERINTERFACE_H
 
+#include <iostream>
 #include "DocParser.h"
 #include "QueryProcessor.h"
 #include "DSAVLTree.h"
@@ -20,16 +21,15 @@ private:
     DocParser docReader;
     QueryProcessor process;
     StopWord stops;
-    int totalArticle;//total number of articles indexed
 //    DSAVLTree<Word> words;
 //    DSAVLTree<Word> orgs;
 //    DSAVLTree<Word> persons;
 
 public:
     UserInterface();
+    void run(const string& file);//run search engine
     void clearIndex();//delete every tree
     void parseDocs(const string& direct);//parse all documents
-    void enterQuery(string& query);
     void displayResults();
     void showText(Document& d);
     void stats();

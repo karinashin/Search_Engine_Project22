@@ -6,6 +6,51 @@
 
 UserInterface::UserInterface() {}
 
+void UserInterface::run(const string& file)
+{
+    bool run = true;
+
+    cout << "Enter 1 to parse files or 2 to use persistence file: " << endl;
+    int choice;
+    cin >> choice;
+    if (choice == 1){
+        cout << "parsing..." << endl;
+        docReader.getFiles(file, stops);
+        cout << "done!" << endl;
+    }
+    else{
+        cout << "parsing..." << endl;
+        docReader.persistenceIndex();//TODO
+        cout << "done!" << endl;
+    }
+
+    while (run)
+    {
+        cout << "Search: " << endl;
+        string query;
+        cin >> query;
+        process.parseQuery(query, docReader.getWordTree(), docReader.getOrgTree(), docReader.getPersonTree(), stops);
+        displayResults();
+        choice = -1;
+        while (choice != 0){
+            cout << "Enter the corresponding number to the article you wish to read (Enter 0 to search new term): " << endl;
+            cin >> choice;
+            if (choice != 0)
+                showText(process.getFinal().at(choice - 1));
+            cout << endl;
+        }
+
+        cout << "Enter 1 if you would like to search again, 2 to display search engine stats, or 0 to exit the search engine: " << endl;
+        cin >> choice;
+        if (choice == 2){
+            stats();
+            cout << endl;
+        }
+        else if (choice == 0)
+            run = false;
+    }
+}
+
 void UserInterface::clearIndex()
 {
     docReader.getWordTree().deleteTree(docReader.getWordTree().getRoot());
@@ -21,14 +66,12 @@ void UserInterface::parseDocs(const string& direct)
     std::cout << "done parsing!" << std::endl;
 }
 
-void UserInterface::enterQuery(string& query)
-{
-    process.parseQuery(query, docReader.getWordTree(), docReader.getOrgTree(), docReader.getPersonTree(), stops);
-}
-
 void UserInterface::displayResults()
 {
-
+    for (int i = 0; i < 15 || i < process.getFinal().size(); i++)
+    {
+        cout << "Title: " << process.getFinal().at(i).getTitle() << ", " << process.getFinal().at(i).getPub() << ", Date: " << process.getFinal().at(i).getDate() << endl;
+    }
 }
 
 void UserInterface::showText(Document& d)

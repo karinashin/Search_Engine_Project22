@@ -9,7 +9,6 @@ void DocParser::parse(const string& filename, StopWord& stop) {
     cout << "NEW DOC: " << filename << endl;
     numDocs++;
 
-    //TODO parse for org and person, put unique ones into avl tree
     //TODO write to persistence file
     //parse main text
     rapidjson::Document doc;
@@ -66,7 +65,6 @@ void DocParser::parse(const string& filename, StopWord& stop) {
     int space;
     while (space != -1)//WORDS
     {
-//        text = text.substr(space);//cut off curr word
         space = text.find(" ");
         Word curr(text.substr(0, space));
 //        cout << "current: " << curr.getStr() << endl;

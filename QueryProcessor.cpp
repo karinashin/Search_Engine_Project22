@@ -109,6 +109,9 @@ void QueryProcessor::parseQuery(string& query, DSAVLTree<Word>& words, DSAVLTree
             space = query.find(" ");
         }
     }
+
+    rankIndex();
+
 }
 
 void QueryProcessor::setUnion(vector<Document>& a, vector<Document>& b)//OR keyword
@@ -118,8 +121,9 @@ void QueryProcessor::setUnion(vector<Document>& a, vector<Document>& b)//OR keyw
     for (int i = 0; i < a.size(); i++)
     {
         vector<Document>::iterator it = find(finalIndex.begin(), finalIndex.end(), a.at(i));
-        if (it == finalIndex.end())//if the doc is NOT in the final index, add it
+        if (it == finalIndex.end()){//if the doc is NOT in the final index, add it
             finalIndex.push_back(a.at(i));
+        }
     }
     for (int i = 0; i < b.size(); i++)
     {
@@ -170,6 +174,11 @@ void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from fin
     finalIndex = temp;
 }
 
+void QueryProcessor::rankIndex()
+{
+    //TODO
+}
+
 bool QueryProcessor::specialStopCheck(StopWord& stop, string& word)
 {
     if (word == "AND" || word == "OR" || word == "NOT")//exclude key words
@@ -178,3 +187,5 @@ bool QueryProcessor::specialStopCheck(StopWord& stop, string& word)
         return true;
     return false;
 }
+
+vector<Document>& QueryProcessor::getFinal() { return finalIndex; }
