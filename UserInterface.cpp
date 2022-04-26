@@ -6,7 +6,7 @@
 
 UserInterface::UserInterface() {}
 
-void UserInterface::run(const string& file)
+void UserInterface::run(const string& file)//TODO add error checking
 {
     bool run = true;
 
@@ -26,21 +26,27 @@ void UserInterface::run(const string& file)
 
     while (run)
     {
+        cin.get();
         cout << "Search: " << endl;
         string query;
-        cin >> query;
+        getline(cin, query);
+        cout << "query: " << query << endl;
+
         process.parseQuery(query, docReader.getWordTree(), docReader.getOrgTree(), docReader.getPersonTree(), stops);
         displayResults();
+        cout << "displayed" << endl;
         choice = -1;
         while (choice != 0){
-            cout << "Enter the corresponding number to the article you wish to read (Enter 0 to search new term): " << endl;
+            cout << "Enter the corresponding number to the article you wish to read (Enter 0 to skip): ";
             cin >> choice;
             if (choice != 0)
                 showText(process.getFinal().at(choice - 1));
+//            cout << "choice: " << choice << endl;
             cout << endl;
         }
 
         cout << "Enter 1 if you would like to search again, 2 to display search engine stats, or 0 to exit the search engine: " << endl;
+        cin.get();
         cin >> choice;
         if (choice == 2){
             stats();
@@ -48,6 +54,8 @@ void UserInterface::run(const string& file)
         }
         else if (choice == 0)
             run = false;
+
+        process.clearFinal();//reset results
     }
 }
 
@@ -68,9 +76,16 @@ void UserInterface::parseDocs(const string& direct)
 
 void UserInterface::displayResults()
 {
-    for (int i = 0; i < 15 || i < process.getFinal().size(); i++)
+    if (process.getFinal().size() == 0)
+        cout << "No results found" << endl;
+
+    for (int i = 0; i < process.getFinal().size(); i++)
     {
+        if (i == 14)
+            break;
+        cout << i + 1 << ") ";
         cout << "Title: " << process.getFinal().at(i).getTitle() << ", " << process.getFinal().at(i).getPub() << ", Date: " << process.getFinal().at(i).getDate() << endl;
+        cout << "Path: " << process.getFinal().at(i).getPath() << endl;
     }
 }
 

@@ -14,15 +14,17 @@ int main(int argc, char** argv) {
     //TODO LIST: Rank indexes, make persistence file (figure out how to erase contents of file), figure out publication info, try to combine fine/contains
 
     UserInterface parse;
-    parse.parseDocs(argv[2]);//absolute path
-    Word w(argv[1]);//search term
-    w.stemming();
+//    parse.parseDocs(argv[2]);//absolute path
+//    parse.getDocParser().getOrgTree().inOrder(parse.getDocParser().getOrgTree().getRoot());
+    parse.run(argv[2]);
+//    Word w(argv[1]);//search term
+//    w.stemming();
 
-    Word org("wall street journal");
-    Word p("cramer");
-    parse.getDocParser().getWordTree().find(parse.getDocParser().getWordTree().getRoot(), w).printDocs();
-    parse.getDocParser().getOrgTree().find(parse.getDocParser().getOrgTree().getRoot(), org).printDocs();
-    parse.getDocParser().getPersonTree().find(parse.getDocParser().getPersonTree().getRoot(), p).printDocs();
+//    Word org("wall street journal");
+//    Word p("cramer");
+//    parse.getDocParser().getWordTree().find(parse.getDocParser().getWordTree().getRoot(), w).printDocs();
+//    parse.getDocParser().getOrgTree().find(parse.getDocParser().getOrgTree().getRoot(), org).printDocs();
+//    parse.getDocParser().getPersonTree().find(parse.getDocParser().getPersonTree().getRoot(), p).printDocs();
 
 //    parse.getWordTree().find(parse.getWordTree().getRoot(), w)->getData().printDocs();
 
