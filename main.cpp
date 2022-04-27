@@ -12,7 +12,7 @@
 using namespace std;
 int main(int argc, char** argv) {
     //TODO LIST: Rank indexes, make persistence file (figure out how to erase contents of file), figure out publication info, try to combine fine/contains
-
+    //add a check for if the word is not found
     UserInterface parse;
 //    parse.parseDocs(argv[2]);//absolute path
 //    parse.getDocParser().getOrgTree().inOrder(parse.getDocParser().getOrgTree().getRoot());

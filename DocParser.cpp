@@ -6,7 +6,7 @@
 DocParser::DocParser() {}
 
 void DocParser::parse(const string& filename, StopWord& stop) {
-    cout << "NEW DOC: " << filename << endl;
+//    cout << "NEW DOC: " << filename << endl;
     numDocs++;
 
     //TODO write to persistence file

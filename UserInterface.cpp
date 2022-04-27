@@ -6,56 +6,76 @@
 
 UserInterface::UserInterface() {}
 
-void UserInterface::run(const string& file)//TODO add error checking
+void UserInterface::run(const string& file)
 {
-    bool run = true;
+    bool go = true;
 
-    cout << "Enter 1 to parse files or 2 to use persistence file: " << endl;
-    int choice;
-    cin >> choice;
-    if (choice == 1){
-        cout << "parsing..." << endl;
-        docReader.getFiles(file, stops);
-        cout << "done!" << endl;
-    }
-    else{
-        cout << "parsing..." << endl;
-        docReader.persistenceIndex();//TODO
-        cout << "done!" << endl;
+    string choice;
+    while (choice != "1" && choice != "2"){
+        cout << "Enter 1 to parse files or 2 to use persistence file: " << endl;
+        cin.clear();
+        cin >> choice;
+        if (choice == "1"){
+            cout << "parsing..." << endl;
+            docReader.getFiles(file, stops);
+            cout << "done!" << endl;
+        }
+        else if (choice == "2"){
+            cout << "parsing..." << endl;
+            docReader.persistenceIndex();//TODO
+            cout << "done!" << endl;
+        }
+        else{
+            cout << "Incorrect input." << endl;
+        }
     }
 
-    while (run)
+    while (go)
     {
         cin.get();
         cout << "Search: " << endl;
         string query;
         getline(cin, query);
-        cout << "query: " << query << endl;
+//        cout << "query: " << query << endl;
 
         process.parseQuery(query, docReader.getWordTree(), docReader.getOrgTree(), docReader.getPersonTree(), stops);
         displayResults();
-        cout << "displayed" << endl;
+//        cout << "displayed" << endl;
+
         choice = -1;
-        while (choice != 0){
+        while (choice != "0"){//TODO fix error checking
             cout << "Enter the corresponding number to the article you wish to read (Enter 0 to skip): ";
             cin >> choice;
-            if (choice != 0)
-                showText(process.getFinal().at(choice - 1));
-//            cout << "choice: " << choice << endl;
-            cout << endl;
+            if (choice == "0")//exit
+                break;
+            else if (choice == "1" || choice == "2" || choice == "3" || choice == "4" || choice == "5" || choice == "6" || choice == "7" || choice == "8" || choice == "9" || choice == "10" || choice == "11" || choice == "12" || choice == "13" || choice == "14" || choice == "15"){
+                showText(process.getFinal().at(stoi(choice) - 1));
+                cout << endl;
+            }
+            else
+                cout << "Incorrect input." << endl;
         }
 
-        cout << "Enter 1 if you would like to search again, 2 to display search engine stats, or 0 to exit the search engine: " << endl;
-        cin.get();
-        cin >> choice;
-        if (choice == 2){
-            stats();
-            cout << endl;
+        choice = -1;//reset choice;
+        while (choice != "0"){
+            cout << "Enter 1 to search again, 2 to display search engine stats, or 0 to exit the search engine: " << endl;
+            cin.get();
+            cin >> choice;
+            if (choice == "1"){
+                process.clearFinal();//reset results
+                break;
+            }
+            else if (choice == "2"){
+                stats();
+                cout << endl;
+            }
+            else if (choice == "0"){
+                go = false;
+                break;
+            }
+            else
+                cout << "Incorrect input." << endl;
         }
-        else if (choice == 0)
-            run = false;
-
-        process.clearFinal();//reset results
     }
 }
 
@@ -81,7 +101,7 @@ void UserInterface::displayResults()
 
     for (int i = 0; i < process.getFinal().size(); i++)
     {
-        if (i == 14)
+        if (i == 15)
             break;
         cout << i + 1 << ") ";
         cout << "Title: " << process.getFinal().at(i).getTitle() << ", " << process.getFinal().at(i).getPub() << ", Date: " << process.getFinal().at(i).getDate() << endl;

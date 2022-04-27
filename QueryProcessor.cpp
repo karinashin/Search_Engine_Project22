@@ -232,7 +232,7 @@ void QueryProcessor::addTerm(vector<Document>& a)
         vector<Document>::iterator finalIt = find(finalIndex.begin(), finalIndex.end(), a.at(i));
         if (finalIt == finalIndex.end()){//if the doc is NOT in the final index, add it
             finalIndex.push_back(a.at(i));
-            cout << "added new " << endl;
+//            cout << "added new " << endl;
         }
     }
 }
@@ -250,7 +250,7 @@ void QueryProcessor::complement(vector<Document>& a)//delete set a from finalInd
 
 void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from final that don't include the person/org
 {
-    for (int i = 0; i < a.size(); i++)
+    for (int i = 0; i < a.size(); i++)//TODO resulting files should all contain the person or org
     {
         vector<Document>::iterator it = find(finalIndex.begin(), finalIndex.end(), a.at(i));
         if (it == finalIndex.end())//doc of a does NOT exist in final
