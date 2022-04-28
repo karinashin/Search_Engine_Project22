@@ -268,6 +268,7 @@ T& DSAVLTree<T>::find(Node<T>* node, T& val)//TODO add an edge case for when the
 //    {
 //        std::cout << "while loop" << std::endl;
 //        if (node->getData() == val){
+//            std::cout << "Found node" << std::endl;
 //            return node;
 //        }
 //        else if (val < node->getData())
@@ -275,6 +276,7 @@ T& DSAVLTree<T>::find(Node<T>* node, T& val)//TODO add an edge case for when the
 //        else
 //            node = node->getRight();
 //    }
+//    std::cout << "not found" << std::endl;
 //    return empty;
 //}
 

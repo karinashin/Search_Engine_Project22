@@ -25,7 +25,6 @@ public:
     void parseQuery(string& query, DSAVLTree<Word>& words, DSAVLTree<Word>& orgs, DSAVLTree<Word>& people, StopWord& stop);//parse query
     vector<Word> parseAndOr();
     Word findPersonOrg();//get the full name of the person being searched for (accounts for those w/first+last
-//    void setUnion(vector<Document>& a, vector<Document>& b);//OR keyword
 //    void intersection(vector<Document>& a, vector<Document>&b);//AND keyword
     void setUnion(vector<Word> a, DSAVLTree<Word>& tree);//OR keyword
     void intersection(vector<Word> a, DSAVLTree<Word>& tree);//AND keyword

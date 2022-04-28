@@ -88,13 +88,6 @@ void DocParser::parse(const string& filename, StopWord& stop) {
             words.find(words.getRoot(), curr).incrFreq(currDoc);//index document on object in tree
 //            curr.incrFreq(currDoc);//indexes a temporary variable, not the actual Word object in the tree
         }
-//        std::cout << curr << std::endl;
-//        Node<Word>*& found = words.find(words.getRoot(), curr);
-//        if (found->getLeft() == nullptr && found->getRight() == nullptr && !(found->getData() == curr)){//curr is not in tree
-//            cout << "seg fault" << endl;
-//            words.insert(curr);
-//        }
-//        curr.incrFreq(currDoc);
 
         text = text.substr(space + 1);//cut off curr word
     }
@@ -116,16 +109,6 @@ void DocParser::persistenceIndex()//read in persistence file to index words
 {
 
 }
-
-//vector<Document>& DocParser::findIndex(Word& obj)
-//{
-//    return words.find(words.getRoot(), obj).getDocs();
-////    return words.find(words.getRoot(), obj)->getData().getDocs();
-//}
-
-//vector<Document>& DocParser::findWordIndex(Word& w) { return w.getDocs(); }
-//vector<Document>& DocParser::findOrgIndex(Word& org) { return org.getDocs(); }
-//vector<Document>& DocParser::findPersonIndex(Word& p) {return p.getDocs(); }
 
 DSAVLTree<Word>& DocParser::getWordTree() { return words; }
 DSAVLTree<Word>& DocParser::getOrgTree() { return orgs; }

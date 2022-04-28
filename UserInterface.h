@@ -21,9 +21,6 @@ private:
     DocParser docReader;
     QueryProcessor process;
     StopWord stops;
-//    DSAVLTree<Word> words;
-//    DSAVLTree<Word> orgs;
-//    DSAVLTree<Word> persons;
 
 public:
     UserInterface();
