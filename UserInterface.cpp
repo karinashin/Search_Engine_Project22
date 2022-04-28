@@ -8,6 +8,8 @@ UserInterface::UserInterface() {}
 
 void UserInterface::run(const string& file)
 {
+    std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+
     bool go = true;
 
     string choice;
@@ -37,13 +39,16 @@ void UserInterface::run(const string& file)
         string query;
         getline(cin, query);
 //        cout << "query: " << query << endl;
-
+        start = std::chrono::high_resolution_clock::now();
         process.parseQuery(query, docReader.getWordTree(), docReader.getOrgTree(), docReader.getPersonTree(), stops);
+        end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> time_in_seconds = end - start;
+        cout << std::fixed << "Query Execution Time: " << time_in_seconds.count() << endl;
         displayResults();
 //        cout << "displayed" << endl;
 
         choice = -1;
-        while (choice != "0"){//TODO fix error checking
+        while (choice != "0"){
             cout << "Enter the corresponding number to the article you wish to read (Enter 0 to skip): ";
             cin >> choice;
             if (choice == "0")//exit
@@ -136,6 +141,14 @@ void UserInterface::stats()
     cout << "Search Engine stats:" << endl;
     cout << "Total number of articles indexed: " << docReader.getNumDocs() << endl;
     cout << "Total number of unique words indexed: " << docReader.getWordTree().getCount() << endl;
+    cout << "Total number of unique organizations indexed: " << docReader.getOrgTree().getCount() << endl;
+    cout << "Total number of unique persons indexed: " << docReader.getPersonTree().getCount() << endl;
+    getTopWords();
+}
+
+void UserInterface::getTopWords()
+{
+
 }
 
 DocParser& UserInterface::getDocParser() { return docReader; }

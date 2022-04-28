@@ -9,7 +9,7 @@ QueryProcessor::QueryProcessor(){}
 void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Word>& orgs, DSAVLTree<Word>& people, StopWord& stop)//parse query
 {
     this->query = q;
-    std::cout << "NEW QUERY: " << query << std::endl;
+//    std::cout << "NEW QUERY: " << query << std::endl;
     int space;
     while (space != -1)
     {
@@ -22,11 +22,11 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
 
         if (curr.getStr() == "and" || curr.getStr() == "or"){
             if (curr.getStr() == "and"){//perform corresponding set operation
-                std::cout << "intersection" << std::endl;
+//                std::cout << "intersection" << std::endl;
                 intersection(parseAndOr(), words);
             }
             else{
-                std::cout << "union" << std::endl;
+//                std::cout << "union" << std::endl;
                 setUnion(parseAndOr(), words);
             }
         }
@@ -43,8 +43,8 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
                 query = "";//empty query
             }
             word1.stemming();
-            std::cout << word1 << std::endl;
-            std::cout << "complement" << std::endl;
+//            std::cout << word1 << std::endl;
+//            std::cout << "complement" << std::endl;
             if (words.contains(word1))
                 complement(words.find(words.getRoot(), word1).getDocs());
             else
@@ -54,7 +54,7 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
         else if (curr.getStr() == "org"){
             query = query.substr(space + 1);//cut off operator
             Word org(findPersonOrg());
-            std::cout << "org intersection" << std::endl;
+//            std::cout << "org intersection" << std::endl;
             if (orgs.contains(org))
                 addPersonOrg(orgs.find(orgs.getRoot(), org).getDocs());
             else
@@ -63,9 +63,9 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
         }
         else if (curr.getStr() == "person"){
             query = query.substr(space + 1);//cut off operator KEEP
-            cout << "query: " << query << endl;
+//            cout << "query: " << query << endl;
             Word person(findPersonOrg());
-            std::cout << "person intersection" << std::endl;
+//            std::cout << "person intersection" << std::endl;
             if (people.contains(person))
                 addPersonOrg(people.find(people.getRoot(), person).getDocs());//index has to include only those that have this person
             else
@@ -95,7 +95,7 @@ vector<Word> QueryProcessor::parseAndOr()
 
     int space = query.find(" ");
     query = query.substr(space + 1);//cut off operator
-    cout << "query: " << query << endl;
+//    cout << "query: " << query << endl;
     while (check)
     {
         Word word;
@@ -153,7 +153,7 @@ Word QueryProcessor::findPersonOrg()//operator is already removed from query
         space = query.find(" ");
         count++;
     }
-    cout << "Name: " << name << endl;
+//    cout << "Name: " << name << endl;
     Word person(name);
 
     return person;
@@ -241,7 +241,7 @@ void QueryProcessor::intersection(vector<Word> a, DSAVLTree<Word>& tree)//AND ke
 
 void QueryProcessor::addTerm(vector<Document>& a)
 {
-    cout << "addTerm" << endl;
+//    cout << "addTerm" << endl;
     for (int i = 0; i < a.size(); i++)
     {
         vector<Document>::iterator finalIt = find(finalIndex.begin(), finalIndex.end(), a.at(i));
@@ -254,7 +254,6 @@ void QueryProcessor::addTerm(vector<Document>& a)
 
 void QueryProcessor::complement(vector<Document>& a)//delete set a from finalIndex set
 {
-    std::cout << "complement" << std::endl;
     for (int i = 0; i < a.size(); i++)
     {
         vector<Document>::iterator it = find(finalIndex.begin(), finalIndex.end(), a.at(i));
@@ -267,17 +266,12 @@ void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from fin
 {//i think it works?
     //if finalIndex already has values, remove any docs that don't contain person/org
     //else: query only has person/org keywords, just add the files that contain the person/org
-    cout << "a.size() " << a.size() << endl;
-    cout << a.at(0).getTitle() << endl;
     if (finalIndex.size() > 0)
     {
-        cout << "size: " << finalIndex.size() << endl;
         for (int i = 0; i < finalIndex.size(); i++)
         {//get person/org document index list from doc parser (a), each file in finalIndex should be in the person/orgs index
             vector<Document>::iterator it = find(a.begin(), a.end(), finalIndex.at(i));
-            cout << "find function called" << endl;
             if (it == a.end()){//doc of final index does NOT exist in person/org doc list
-                cout << "remove from final" << endl;
                 finalIndex.erase(finalIndex.begin() + i);//remove the file that doens't contain person/org
                 i--;//account for file lost
             }

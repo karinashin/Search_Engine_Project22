@@ -6,6 +6,7 @@
 #define INC_22S_FINAL_PROJ_USERINTERFACE_H
 
 #include <iostream>
+#include <chrono>
 #include "DocParser.h"
 #include "QueryProcessor.h"
 #include "DSAVLTree.h"
@@ -30,6 +31,7 @@ public:
     void displayResults();
     void showText(Document& d);
     void stats();
+    void getTopWords();//prints out top 25 most frequent words
     DocParser& getDocParser();//used to access word/org/person avl trees
 };
 
