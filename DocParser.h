@@ -10,6 +10,7 @@
 #include <dirent.h>
 #include <filesystem>
 #include <vector>
+#include <map>
 #include <sys/stat.h>
 #include "DSAVLTree.h"
 #include "Word.h"
@@ -24,6 +25,7 @@ private:
     DSAVLTree<Word> words;
     DSAVLTree<Word> orgs;
     DSAVLTree<Word> people;
+    map<Word, int> top;
     int numDocs = 0;
 
 public:
@@ -31,12 +33,8 @@ public:
     void parse(const string& filename, StopWord& stop);//parse the documents for unique words
     void parseOrgPerson(const string& filename, Document& d);//parse doc for orgs and persons
     void getFiles(const string& directory, StopWord& stop);//returns filenames for traversal through directory
+    void order(Word& w);//order top 25 more frequent words
     void persistenceIndex();//read in persistence file to index words
-
-//    vector<Document>& findIndex(Word& obj);//return the document index of a given Word object
-//    vector<Document>& findWordIndex(Word& w);
-//    vector<Document>& findOrgIndex(Word& org);
-//    vector<Document>& findPersonIndex(Word& p);
 
     DSAVLTree<Word>& getWordTree();
     DSAVLTree<Word>& getOrgTree();

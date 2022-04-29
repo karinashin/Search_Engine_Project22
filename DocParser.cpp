@@ -110,6 +110,11 @@ void DocParser::persistenceIndex()//read in persistence file to index words
 
 }
 
+void DocParser::order(Word& w)
+{
+//    top.insert(pair<Word, int> (w, w.getDocs().size())); // ERROR
+}
+
 DSAVLTree<Word>& DocParser::getWordTree() { return words; }
 DSAVLTree<Word>& DocParser::getOrgTree() { return orgs; }
 DSAVLTree<Word>& DocParser::getPersonTree() { return people; }

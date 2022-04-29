@@ -100,7 +100,7 @@ vector<Word> QueryProcessor::parseAndOr()
     {
         Word word;
         space = query.find(" ");
-        cout << space << endl;
+//        cout << space << endl;
         if (space != -1){//not at the end of the line
             if (query.substr(0, space) != "AND" && query.substr(0, space) != "OR" && query.substr(0, space) != "NOT" && query.substr(0, space) != "PERSON" && query.substr(0, space) != "ORG")
             {//if its not a key word
@@ -203,45 +203,56 @@ void QueryProcessor::setUnion(vector<Word> a, DSAVLTree<Word>& tree)//OR keyword
 void QueryProcessor::intersection(vector<Word> a, DSAVLTree<Word>& tree)//AND keyword
 {//TODO Doesn't work
     //a holds the words in the intersection
-    for (int i = 0; i < a.size(); i++)
-        cout << a.at(i).getStr() << endl;
+//    for (int i = 0; i < a.size(); i++)
+//        cout << a.at(i).getStr() << endl;
 
-    bool check = true;
+//    bool check = true;
     vector<Document> temp;
     for (int i = 0; i < a.size(); i++){//find the first word in a that is in the tree
         if (tree.contains(a.at(i))){
             temp = tree.find(tree.getRoot(), a.at(i)).getDocs();
+            cout << "a: " << a.at(i).getStr() << endl;
             break;
         }
         else{
             cout << a.at(i).getStr() << " is not found." << endl;
         }
     }
+
+    cout << "temp: " << temp.size() << endl;
+
 //    vector<Document> temp = tree.find(tree.getRoot(), a.at(0))->getData().getDocs();
     for (int i = 0; i < temp.size(); i++)//for each doc of the first word (Word)
     {
+        bool check = true;
         vector<Document>::iterator it;
-        for (int j = 1; j < a.size(); j++){//check if the doc is in every other docs index (a.at(j))
+        for (int j = 0; j < a.size(); j++){//check if the doc is in every other docs index (a.at(j))
+            //need to have a check for if a.at(j) is the same as temp?
             vector<Document> other = tree.find(tree.getRoot(), a.at(j)).getDocs();
+            cout << "a.at(j) " << a.at(j).getStr() << endl;
+            cout << "a.at(j).getSize() " << other.size() << endl;
 //            vector<Document> other = tree.find(tree.getRoot(), a.at(j))->getData().getDocs();
             it = find(other.begin(), other.end(), temp.at(i));//look for each element of a in b
             if (it == other.end())//doc does NOT exit in another words index
             {
+                cout << "false" << endl;
                 check = false;
                 break;//don't add doc to final index
             }
         }
         if (check){//if the doc is in all word's indexes
             vector<Document>::iterator finalIt = find(finalIndex.begin(), finalIndex.end(), *it);
-            if (finalIt == finalIndex.end())//if the doc is NOT in the final index, add it
+            if (finalIt == finalIndex.end()){//if the doc is NOT in the final index, add it
                 finalIndex.push_back(*it);
+                cout << "added to final" << endl;
+            }
         }
     }
 }
 
 void QueryProcessor::addTerm(vector<Document>& a)
 {
-//    cout << "addTerm" << endl;
+//    cout << "size: " << a.size() << endl;
     for (int i = 0; i < a.size(); i++)
     {
         vector<Document>::iterator finalIt = find(finalIndex.begin(), finalIndex.end(), a.at(i));
