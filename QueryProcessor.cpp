@@ -76,8 +76,10 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
         else{//just a term
             Word term(curr);
             term.stemming();
-            if (words.contains(term))
+            if (words.contains(term)){
                 addTerm(words.find(words.getRoot(), term).getDocs());
+                queryWords.push_back(term);
+            }
             else
                 cout << term.getStr() << " is not found." << endl;
 //            addTerm(words.find(words.getRoot(), term)->getData().getDocs());
@@ -331,7 +333,7 @@ void QueryProcessor::rankIndex()
             }
         }
         best.push_back(finalIndex.at(index));//get the corresponding doc for that freq
-        //remove freqs.at(i) and finalIndex.at(i) maybe make a copy of finalIndex so that i don't remove the actual values
+        //TODO remove freqs.at(i) and finalIndex.at(i) maybe make a copy of finalIndex so that i don't remove the actual values
     }
 }
 
@@ -344,9 +346,11 @@ bool QueryProcessor::specialStopCheck(StopWord& stop, string& word)
     return false;
 }
 
-void QueryProcessor::clearFinal()
+void QueryProcessor::clearFinal()//reset all vectors for next query
 {
     finalIndex.erase(finalIndex.begin(), finalIndex.end());
+    queryWords.erase(queryWords.begin(), queryWords.end());
+    best.erase(best.begin(), best.end());
 }
 
 vector<Document>& QueryProcessor::getFinal() { return finalIndex; }
