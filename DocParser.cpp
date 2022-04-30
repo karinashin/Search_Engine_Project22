@@ -110,7 +110,7 @@ void DocParser::persistenceIndex()//read in persistence file to index words
 
 }
 
-void DocParser::order(Word& w)
+void DocParser::order(Word& w)//for top 25 most frequent words
 {
 //    top.insert(pair<Word, int> (w, w.getDocs().size())); // ERROR
 }

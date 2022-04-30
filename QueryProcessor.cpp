@@ -43,10 +43,11 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
                 query = "";//empty query
             }
             word1.stemming();
-//            std::cout << word1 << std::endl;
-//            std::cout << "complement" << std::endl;
-            if (words.contains(word1))
+
+            if (words.contains(word1)){
                 complement(words.find(words.getRoot(), word1).getDocs());
+                queryWords.push_back(word1);//for ranking
+            }
             else
                 cout << word1.getStr() << " is not found." << endl;
 //            complement(words.find(words.getRoot(), word1)->getData().getDocs());
@@ -54,7 +55,7 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
         else if (curr.getStr() == "org"){
             query = query.substr(space + 1);//cut off operator
             Word org(findPersonOrg());
-//            std::cout << "org intersection" << std::endl;
+
             if (orgs.contains(org))
                 addPersonOrg(orgs.find(orgs.getRoot(), org).getDocs());
             else
@@ -107,6 +108,7 @@ vector<Word> QueryProcessor::parseAndOr()
                 word = query.substr(0, space);
                 word.stemming();
                 args.push_back(word);
+                queryWords.push_back(word);//for ranking
                 query = query.substr(space + 1);
             }
             else
@@ -118,6 +120,7 @@ vector<Word> QueryProcessor::parseAndOr()
             query = "";//empty query
             word.stemming();
             args.push_back(word);
+            queryWords.push_back(word);//for ranking
             break;
         }
     }
@@ -155,6 +158,7 @@ Word QueryProcessor::findPersonOrg()//operator is already removed from query
     }
 //    cout << "Name: " << name << endl;
     Word person(name);
+    queryWords.push_back(person);//for ranking
 
     return person;
 }
@@ -300,7 +304,35 @@ void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from fin
 
 void QueryProcessor::rankIndex()
 {
-    //TODO
+    vector<int> freqs; //corresponding total freqs for each doc in finalIndex
+    for (int queryIndex = 0; queryIndex < finalIndex.size(); queryIndex++)//for every doc in final index
+    {
+        int sum = 0;
+        for (int i = 0; i < queryWords.size(); i++)//for every word in query
+        {
+            //get the each words frequency in the current doc and add them all together
+            sum += queryWords.at(i).getDocFreq(finalIndex.at(queryIndex));//add total freq of each word for this doc
+        }
+        freqs.push_back(sum);
+    }
+    //result: total frequency for each doc
+
+    //get the top 15 docs with the highest freq
+    int highest = freqs.at(0);
+    int index = 0;
+    for (int n = 0; n < 15; n++){
+        if (n > freqs.size())//less that 15 docs in the finalIndex
+            break;
+        for (int i = 1; i < freqs.size(); i++)//find the next highest freq
+        {
+            if (freqs.at(i) > highest){//get highest freq
+                highest = freqs.at(i);
+                index = i;
+            }
+        }
+        best.push_back(finalIndex.at(index));//get the corresponding doc for that freq
+        //remove freqs.at(i) and finalIndex.at(i) maybe make a copy of finalIndex so that i don't remove the actual values
+    }
 }
 
 bool QueryProcessor::specialStopCheck(StopWord& stop, string& word)
@@ -318,3 +350,4 @@ void QueryProcessor::clearFinal()
 }
 
 vector<Document>& QueryProcessor::getFinal() { return finalIndex; }
+vector<Document>& QueryProcessor::getBest() { return best; }

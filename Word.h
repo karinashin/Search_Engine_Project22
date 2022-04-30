@@ -38,6 +38,7 @@ public:
     void printDocs();
     void incrFreq(Document& doc);//given a doc, incrememnt its corresponding freq.
     vector<int>& getFrequency();
+    int getDocFreq(Document& doc);//get the frequency of a specific doc for a word
     int getTotal();
     friend std::ostream& operator<< (std::ostream& out, const Word& w);
 };

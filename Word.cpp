@@ -87,6 +87,16 @@ void Word::incrFreq(Document& doc)
     frequency.push_back(1);//frequency that corresponds to the current doc
 }
 
+int Word::getDocFreq(Document& doc)
+{
+   for (int i = 0; i < docs.size(); i++)
+   {
+       if (docs.at(i) == doc)
+           return frequency.at(i);//return corresponding freq. for given doc
+   }
+   cout << "Doc not found." << endl;
+}
+
 vector<int>& Word::getFrequency() { return frequency; }
 int Word::getTotal() { return total; }
 std::ostream& operator<< (std::ostream& out, const Word& w)

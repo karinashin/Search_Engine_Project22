@@ -31,7 +31,6 @@ private:
 public:
     DocParser();
     void parse(const string& filename, StopWord& stop);//parse the documents for unique words
-    void parseOrgPerson(const string& filename, Document& d);//parse doc for orgs and persons
     void getFiles(const string& directory, StopWord& stop);//returns filenames for traversal through directory
     void order(Word& w);//order top 25 more frequent words
     void persistenceIndex();//read in persistence file to index words

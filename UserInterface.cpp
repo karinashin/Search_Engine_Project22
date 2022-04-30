@@ -44,6 +44,7 @@ void UserInterface::run(const string& file)
         end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> time_in_seconds = end - start;
         cout << std::fixed << "Query Execution Time: " << time_in_seconds.count() << endl;
+
         displayResults();
 //        cout << "displayed" << endl;
 
@@ -99,7 +100,7 @@ void UserInterface::parseDocs(const string& direct)
     std::cout << "done parsing!" << std::endl;
 }
 
-void UserInterface::displayResults()
+void UserInterface::displayResults()//TODO change getFinal to getBest()
 {
     if (process.getFinal().size() == 0)
         cout << "No results found" << endl;
