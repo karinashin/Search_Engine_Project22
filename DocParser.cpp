@@ -70,6 +70,7 @@ void DocParser::parse(const string& filename, StopWord& stop) {
 //        cout << "current: " << curr.getStr() << endl;
         curr.toLower();//remove caps
         if (stop.isStopWord(curr.getStr())){
+//            cout << "stop word found" << endl;
             text = text.substr(space + 1);//cut off curr word
             space = text.find(" ");
             continue;//don't add to tree

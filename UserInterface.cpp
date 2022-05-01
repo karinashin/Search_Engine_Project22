@@ -162,12 +162,23 @@ void UserInterface::stats()
     getTopWords();
 }
 
+void UserInterface::topWordsHelper(Node<Word>* n)
+{
+    if (n != nullptr){
+        topWordsHelper(n->getLeft());
+        frequency.push_back(n->getData().getTotal());
+        all.push_back(n->getData());
+        topWordsHelper(n->getRight());
+    }
+}
+
 void UserInterface::getTopWords()
 {
     cout << "Get top words" << endl;
+    topWordsHelper(docReader.getWordTree().getRoot());
     vector<Word> top;//top 25 words
-    vector<int> freqs; //corresponding total freqs for each word
-    vector<Word> all;//save words too? corresponding to freqs
+//    vector<int> freqs; //corresponding total freqs for each word
+//    vector<Word> all;//save words too? corresponding to freqs
     //go through tree and get the frequency of each word (in order)
     //result: total frequency for each doc
 
@@ -175,23 +186,23 @@ void UserInterface::getTopWords()
 //    for (int i = 0; i < freqs.size(); i++)
 //        cout << freqs.at(i) << " " << finalIndex.at(i).getPath() << endl;
 
-
-    //get the top 15 docs with the highest freq
-    for (int n = 0; n < 15; n++){
-        int highest = freqs.at(0);
+    //get the top 25 most frequent words
+    cout << "Top 25 Most Frequent Words: " << endl;
+    for (int n = 0; n < 25; n++){
+        int highest = frequency.at(0);
         int index = 0;
-        if (n > freqs.size())//less that 15 docs in the finalIndex
+        if (n > frequency.size())//less than 25 total words
             break;
-        for (int i = 1; i < freqs.size(); i++)//find the next highest freq
+        for (int i = 1; i < frequency.size(); i++)//find the next highest freq
         {
-            if (freqs.at(i) > highest){//get highest freq
-                highest = freqs.at(i);
+            if (frequency.at(i) > highest){//get highest freq
+                highest = frequency.at(i);
                 index = i;
             }
         }
-        top.push_back(all.at(index));//get the corresponding doc for that freq
-        cout << "next higheset frequency: " << freqs.at(index) << endl;
-        freqs.erase(freqs.begin() + index);
+//        top.push_back(all.at(index));//get the corresponding doc for that freq
+        cout << all.at(index) << ": " << frequency.at(index) << endl;
+        frequency.erase(frequency.begin() + index);
         all.erase(all.begin() + index);
     }
 }

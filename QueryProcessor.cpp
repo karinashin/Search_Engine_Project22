@@ -18,7 +18,10 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
         curr.toLower();
         cout << curr.getStr() << endl;
         if (specialStopCheck(stop, curr.getStr()))
+        {
+            query = query.substr(space + 1);//cut off word
             continue;//skip stop words
+        }
 
         if (curr.getStr() == "and" || curr.getStr() == "or"){
             if (curr.getStr() == "and"){//perform corresponding set operation
@@ -54,7 +57,6 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
             }
             else
                 cout << word1.getStr() << " is not found." << endl;
-//            complement(words.find(words.getRoot(), word1)->getData().getDocs());
         }
         else if (curr.getStr() == "org"){
             query = query.substr(space + 1);//cut off operator
@@ -95,10 +97,6 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
         }
         space = query.find(" ");//to check if youve reached the end of the query
     }
-//    cout << "Query words: " << endl;
-//    for (int i = 0; i < queryWords.size(); i++)
-//        cout << queryWords.at(i) << endl;
-//    cout << "done parsing query" << endl;
 
 //    rankIndex();//TODO
 }
@@ -122,7 +120,6 @@ vector<Word> QueryProcessor::parseAndOr()
                 word = query.substr(0, space);
                 word.stemming();
                 args.push_back(word);
-//                queryWords.push_back(word);//for ranking
                 query = query.substr(space + 1);
             }
             else
@@ -134,7 +131,6 @@ vector<Word> QueryProcessor::parseAndOr()
             query = "";//empty query
             word.stemming();
             args.push_back(word);
-//            queryWords.push_back(word);//for ranking
             break;
         }
     }
@@ -170,9 +166,7 @@ Word QueryProcessor::findPersonOrg()//operator is already removed from query
         space = query.find(" ");
         count++;
     }
-//    cout << "Name: " << name << endl;
     Word person(name);
-//    queryWords.push_back(person);//for ranking
 
     return person;
 }
@@ -181,7 +175,6 @@ void QueryProcessor::setUnion(vector<Word> a, DSAVLTree<Word>& tree)//OR keyword
 {
     for (int i = 0; i < a.size(); i++)//for every word object in the OR operator
     {
-//        cout << a.at(i).getStr() << endl;
         vector<Document> temp;
         if (tree.contains(a.at(i))){
             temp = tree.find(tree.getRoot(), a.at(i)).getDocs();
@@ -210,6 +203,7 @@ void QueryProcessor::intersection(Word& word, DSAVLTree<Word>& tree)//AND keywor
         cout << "if statement" << endl;
         if (tree.contains(word))
         {
+            queryWords.push_back(tree.find(tree.getRoot(), word));
             vector<Document> temp = tree.find(tree.getRoot(), word).getDocs();
             for (int i = 0; i < temp.size(); i++)
                 finalIndex.push_back(temp.at(i));
@@ -220,21 +214,23 @@ void QueryProcessor::intersection(Word& word, DSAVLTree<Word>& tree)//AND keywor
     else
     {
         vector<Document> temp;
-        if (tree.contains(word))
+        if (tree.contains(word)){
+            queryWords.push_back(tree.find(tree.getRoot(), word));
             temp = tree.find(tree.getRoot(), word).getDocs();
+        }
         else
             cout << word.getStr() << " not found" << endl;
-        cout << "else statment" << endl;
+//        cout << "else statment" << endl;
         for (int i = 0; i < temp.size(); i++)
         {
-            cout << "inner for loop running" << endl;
+//            cout << "inner for loop running" << endl;
             vector<Document>::iterator it = find(finalIndex.begin(), finalIndex.end(), temp.at(i));
             if (it != finalIndex.end()){//doc of a exists in final, only add docs that are in word.getDocs and final
                 finalList.push_back(*it);//add the docs that contain the word from the finalIndex
-                cout << "added to final list" << endl;
+//                cout << "added to final list" << endl;
             }
         }
-        cout << "Done" << endl;
+//        cout << "Done" << endl;
         finalIndex.clear();
         finalIndex = finalList;//should only contain docs that contain the word
     }
@@ -264,8 +260,8 @@ void QueryProcessor::complement(vector<Document>& a)//delete set a from finalInd
 }
 
 void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from final that don't include the person/org
-{//doesn't work with AND EX: AND investor stock PERSON cramer
-    cout << "Add person/org" << endl;//TODO 21883 is being printed with random chars
+{
+    cout << "Add person/org" << endl;
     //if finalIndex already has values, remove any docs that don't contain person/org
     //else: query only has person/org keywords, just add the files that contain the person/org
     vector<Document> personList;
@@ -277,7 +273,7 @@ void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from fin
             cout << "person for" << endl;
 //            vector<Document>::iterator it = find(a.begin(), a.end(), finalIndex.at(i));
             vector<Document>::iterator it = find(finalIndex.begin(), finalIndex.end(), a.at(i));
-            if (it != a.end()){//doc of person/org list exists in final index, keep
+            if (it != finalIndex.end()){//doc of person/org list exists in final index, keep
 //                cout << "does not exist in doc list" << endl;
                 personList.push_back(*it);
                 cout << "added " << it->getPath() << endl;
@@ -350,7 +346,7 @@ void QueryProcessor::rankIndex()
 
 bool QueryProcessor::specialStopCheck(StopWord& stop, string& word)
 {
-    if (word == "AND" || word == "OR" || word == "NOT")//exclude key words
+    if (word == "and" || word == "or" || word == "not")//exclude key words
         return false;
     else if (stop.isStopWord(word))
         return true;

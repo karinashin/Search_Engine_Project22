@@ -23,6 +23,10 @@ private:
     QueryProcessor process;
     StopWord stops;
 
+    //for ranking
+    vector<int> frequency;//frequencies of words
+    vector<Word> all;//vector of all words
+
 public:
     UserInterface();
     void run(const string& file);//run search engine
@@ -31,6 +35,7 @@ public:
     void displayResults();
     void showText(Document& d);
     void stats();
+    void topWordsHelper(Node<Word>* n);//populates frequency and word vectors
     void getTopWords();//prints out top 25 most frequent words
     DocParser& getDocParser();//used to access word/org/person avl trees
     QueryProcessor& getQueryProcessor();
