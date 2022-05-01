@@ -164,7 +164,36 @@ void UserInterface::stats()
 
 void UserInterface::getTopWords()
 {
+    cout << "Get top words" << endl;
+    vector<Word> top;//top 25 words
+    vector<int> freqs; //corresponding total freqs for each word
+    vector<Word> all;//save words too? corresponding to freqs
+    //go through tree and get the frequency of each word (in order)
+    //result: total frequency for each doc
 
+//    cout << "Frequency" << endl;
+//    for (int i = 0; i < freqs.size(); i++)
+//        cout << freqs.at(i) << " " << finalIndex.at(i).getPath() << endl;
+
+
+    //get the top 15 docs with the highest freq
+    for (int n = 0; n < 15; n++){
+        int highest = freqs.at(0);
+        int index = 0;
+        if (n > freqs.size())//less that 15 docs in the finalIndex
+            break;
+        for (int i = 1; i < freqs.size(); i++)//find the next highest freq
+        {
+            if (freqs.at(i) > highest){//get highest freq
+                highest = freqs.at(i);
+                index = i;
+            }
+        }
+        top.push_back(all.at(index));//get the corresponding doc for that freq
+        cout << "next higheset frequency: " << freqs.at(index) << endl;
+        freqs.erase(freqs.begin() + index);
+        all.erase(all.begin() + index);
+    }
 }
 
 DocParser& UserInterface::getDocParser() { return docReader; }

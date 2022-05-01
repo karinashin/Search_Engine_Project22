@@ -265,19 +265,28 @@ void QueryProcessor::complement(vector<Document>& a)//delete set a from finalInd
 
 void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from final that don't include the person/org
 {//doesn't work with AND EX: AND investor stock PERSON cramer
-    cout << "Add person/org" << endl;
+    cout << "Add person/org" << endl;//TODO 21883 is being printed with random chars
     //if finalIndex already has values, remove any docs that don't contain person/org
     //else: query only has person/org keywords, just add the files that contain the person/org
+    vector<Document> personList;
     if (finalIndex.size() > 0)
     {
-        for (int i = 0; i < finalIndex.size(); i++)
+        cout << "person if" << endl;
+        for (int i = 0; i < a.size(); i++)//used to be finalIndex.size();
         {//get person/org document index list from doc parser (a), each file in finalIndex should be in the person/orgs index
-            vector<Document>::iterator it = find(a.begin(), a.end(), finalIndex.at(i));
-            if (it == a.end()){//doc of final index does NOT exist in person/org doc list
-                finalIndex.erase(finalIndex.begin() + i);//remove the file that doens't contain person/org
-                i--;//account for file lost
+            cout << "person for" << endl;
+//            vector<Document>::iterator it = find(a.begin(), a.end(), finalIndex.at(i));
+            vector<Document>::iterator it = find(finalIndex.begin(), finalIndex.end(), a.at(i));
+            if (it != a.end()){//doc of person/org list exists in final index, keep
+//                cout << "does not exist in doc list" << endl;
+                personList.push_back(*it);
+                cout << "added " << it->getPath() << endl;
+//                finalIndex.erase(finalIndex.begin() + i);//remove the file that doens't contain person/org
+//                i--;//account for file lost
             }
         }
+        finalIndex.clear();
+        finalIndex = personList;
     }
     else{//finalIndex doesn't have any other values in it
         for (int i = 0; i < a.size(); i++)
@@ -287,6 +296,7 @@ void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from fin
                 finalIndex.push_back(a.at(i));//add files with person/org
         }
     }
+    cout << "person done" << endl;
 }
 
 void QueryProcessor::rankIndex()
