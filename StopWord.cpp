@@ -7,9 +7,9 @@
 StopWord::StopWord()
 {
     ifstream stop;//make the stop words AVL tree
-    stop.open("stopWords.txt");
-    if (stop.is_open())
-        cout << "OPened stops" << endl;
+    stop.open("/mnt/c/users/18476/c++/finalProjectTest/stopWords.txt");
+//    if (stop.is_open())
+//        cout << "OPened stops" << endl;
     string curr;
     while (getline(stop, curr))//make an avl tree of stop words
     {

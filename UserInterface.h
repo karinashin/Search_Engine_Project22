@@ -29,6 +29,7 @@ private:
 
 public:
     UserInterface();
+
     void run(const string& file);//run search engine
     void clearIndex();//delete every tree
     void parseDocs(const string& direct);//parse all documents
@@ -36,6 +37,7 @@ public:
     void showText(Document& d);
     void stats();
     void topWordsHelper(Node<Word>* n);//populates frequency and word vectors
+
     void getTopWords();//prints out top 25 most frequent words
     DocParser& getDocParser();//used to access word/org/person avl trees
     QueryProcessor& getQueryProcessor();
