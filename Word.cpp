@@ -8,18 +8,11 @@ Word::Word()
 {
     str = "";
 }
+
 Word::Word(string word)
 {
     str = word;
 }
-
-//Word& Word::operator=(const Word& w)
-//{
-//    str = w.str;
-//    docs = w.docs;
-//    frequency = w.frequency;
-//    total = w.total;
-//}
 
 bool Word::operator<(const Word& w)
 {
@@ -32,11 +25,6 @@ bool Word::operator==(const Word& w)
 {
     return str == w.str;//if theyre the same string, theyre the same word
 }
-//
-//void Word::sort()
-//{
-//    //TODO
-//}
 
 void Word::toLower()
 {

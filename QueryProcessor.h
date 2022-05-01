@@ -23,18 +23,20 @@ private:
 
 public:
     QueryProcessor();
+
     void parseQuery(string& query, DSAVLTree<Word>& words, DSAVLTree<Word>& orgs, DSAVLTree<Word>& people, StopWord& stop);//parse query
     vector<Word> parseAndOr();
     Word findPersonOrg();//get the full name of the person being searched for (accounts for those w/first+last
-//    void intersection(vector<Document>& a, vector<Document>&b);//AND keyword
+
     void setUnion(vector<Word> a, DSAVLTree<Word>& tree);//OR keyword
     void intersection(Word& word, DSAVLTree<Word> & tree);//AND keyword
-//    void intersection(vector<Word> a, DSAVLTree<Word>& tree);//AND keyword
     void addTerm(vector<Document>& a);//add a single term's docs to the final
     void complement(vector<Document>& a);//set subtraction
     void addPersonOrg(vector<Document>& a);//remove any docs that don't include the given person or org
+
     void rankIndex();//rank the documents in the final index by relevancy/frecuency
     bool specialStopCheck(StopWord& stop, string& word);
+
     void clearFinal();//resets all vectors for next query
     vector<Document>& getFinal();
     vector<Document>& getBest();//returns the top 15 ranked documents

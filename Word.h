@@ -24,11 +24,9 @@ private:
 public:
     Word();
     Word(string word);
-//    Word& operator=(const Word& w);//SEG FAULT
     bool operator<(const Word& w);
     bool operator==(const Word& w);
 
-//    void sort();//sorts documents by index (doc with largest freq. goes first)
     void toLower();
     void removePunc();
     void stemming();//using porter2 stemming library

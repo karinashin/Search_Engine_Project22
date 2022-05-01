@@ -6,7 +6,6 @@
 DocParser::DocParser() {}
 
 void DocParser::parse(const string& filename, StopWord& stop) {
-//    cout << "NEW DOC: " << filename << endl;
     numDocs++;
 
     //TODO write to persistence file
@@ -67,27 +66,22 @@ void DocParser::parse(const string& filename, StopWord& stop) {
     {
         space = text.find(" ");
         Word curr(text.substr(0, space));
-//        cout << "current: " << curr.getStr() << endl;
         curr.toLower();//remove caps
         if (stop.isStopWord(curr.getStr())){
-//            cout << "stop word found" << endl;
             text = text.substr(space + 1);//cut off curr word
             space = text.find(" ");
             continue;//don't add to tree
         }
         curr.removePunc();//remove punctuation
         curr.stemming();
-//        cout << "current: " << curr.getStr() << endl;
-        //put unique words into the avl tree
 
+        //put unique words into the avl tree
         if (!words.contains(curr)){//if the word is not already in the tree/new unique word
             curr.incrFreq(currDoc);
             words.insert(curr);
-//            cout << "inserted " << curr.getStr() << endl;
         }
         else{
             words.find(words.getRoot(), curr).incrFreq(currDoc);//index document on object in tree
-//            curr.incrFreq(currDoc);//indexes a temporary variable, not the actual Word object in the tree
         }
 
         text = text.substr(space + 1);//cut off curr word
@@ -109,11 +103,6 @@ void DocParser::getFiles(const string& directory, StopWord& stop)
 void DocParser::persistenceIndex()//read in persistence file to index words
 {
 
-}
-
-void DocParser::order(Word& w)//for top 25 most frequent words
-{
-//    top.insert(pair<Word, int> (w, w.getDocs().size())); // ERROR
 }
 
 DSAVLTree<Word>& DocParser::getWordTree() { return words; }

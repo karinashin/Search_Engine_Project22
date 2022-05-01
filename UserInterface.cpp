@@ -38,7 +38,6 @@ void UserInterface::run(const string& file)
         cout << "Search: " << endl;
         string query;
         getline(cin, query);
-//        cout << "query: " << query << endl;
         start = std::chrono::high_resolution_clock::now();
         process.parseQuery(query, docReader.getWordTree(), docReader.getOrgTree(), docReader.getPersonTree(), stops);
         end = std::chrono::high_resolution_clock::now();
@@ -46,7 +45,6 @@ void UserInterface::run(const string& file)
         cout << std::fixed << "Query Execution Time: " << time_in_seconds.count() << endl;
 
         displayResults();
-//        cout << "displayed" << endl;
 
         choice = -1;
         while (choice != "0"){
@@ -90,7 +88,6 @@ void UserInterface::clearIndex()
     docReader.getWordTree().deleteTree(docReader.getWordTree().getRoot());
     docReader.getOrgTree().deleteTree(docReader.getOrgTree().getRoot());
     docReader.getPersonTree().deleteTree(docReader.getPersonTree().getRoot());
-    //TODO also erase contents of persistence file?
 }
 
 void UserInterface::parseDocs(const string& direct)

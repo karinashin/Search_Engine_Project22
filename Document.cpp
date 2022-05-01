@@ -20,6 +20,8 @@ Document& Document::operator= (const Document& copy)
     date = copy.date;
     filePath = copy.filePath;
     uuid = copy.uuid;
+
+    return *this;
 }
 
 bool Document::operator==(const Document& d)

@@ -25,14 +25,12 @@ private:
     DSAVLTree<Word> words;
     DSAVLTree<Word> orgs;
     DSAVLTree<Word> people;
-    map<Word, int> top;
     int numDocs = 0;
 
 public:
     DocParser();
     void parse(const string& filename, StopWord& stop);//parse the documents for unique words
     void getFiles(const string& directory, StopWord& stop);//returns filenames for traversal through directory
-    void order(Word& w);//order top 25 more frequent words
     void persistenceIndex();//read in persistence file to index words
 
     DSAVLTree<Word>& getWordTree();

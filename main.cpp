@@ -12,23 +12,9 @@
 
 using namespace std;
 int main(int argc, char** argv) {
-    //TODO LIST: Rank indexes, make persistence file (figure out how to erase contents of file), figure out publication info, try to combine fine/contains
-    //add a check for if the word is not found
-    std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
+    //mnt/c/users/18476/c++/searchData 2648 files
+    //TODO LIST: Fix ranking articles, make persistence file (figure out how to erase contents of file)
 
-//    start = std::chrono::high_resolution_clock::now();
     UserInterface parse;
-    parse.run(argv[2]);
-//    parse.parseDocs(argv[2]);//absolute path
-//    string query = "investors";
-//    StopWord word;
-//    parse.getQueryProcessor().parseQuery(query, parse.getDocParser().getWordTree(), parse.getDocParser().getOrgTree(), parse.getDocParser().getPersonTree(), word);
-//    end = std::chrono::high_resolution_clock::now();
-//    //calculate the duration between start and end and print to the terminal
-//    std::chrono::duration<double> time_in_seconds = end - start;
-//    std::cout << std::fixed << "Duration: " << time_in_seconds.count() << std::endl;
-
-//    Word w(argv[1]);//search term
-//    w.stemming();
-//    parse.getDocParser().getOrgTree().inOrder(parse.getDocParser().getOrgTree().getRoot());
+    parse.run(argv[1]);
 }

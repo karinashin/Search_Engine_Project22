@@ -109,9 +109,6 @@ template <typename T>
 class DSAVLTree {
 private:
     Node<T>* root;
-//    Node<T>* left;
-//    Node<T>* right;
-//    int height;//height of entire tree
     int count;//total number of nodes
 
     bool contains(Node<T>* n, T& val);//TODO test private functions?
@@ -126,11 +123,9 @@ public:
     DSAVLTree& operator= (const DSAVLTree<T>& copy);
     Node<T>& copyHelper(Node<T>*& node);
 
-//    int getHeight(Node<T>* node);//get height from any starting node
-    void insert(T& x);//TODO doesn't accept an int
+    void insert(T& x);
     bool contains(T& val) { return contains(root, val); }
     T& find(Node<T>* node, T& val);//given a value, find the matching object in the tree
-//    Node<T>*& find(Node<T>* node, T& val);//iterative
 
     void balanceTree(Node<T>*& node);//balance the tree using right/left rotate
     void rightRotate(Node<T>*& k1);
@@ -148,9 +143,6 @@ template <typename T>
 DSAVLTree<T>::DSAVLTree()
 {
     root = nullptr;
-//    left = nullptr;
-//    right = nullptr;
-//    height = 0;
     count = 0;
 }
 
@@ -220,7 +212,6 @@ void DSAVLTree<T>::insert(T& x)//public
 template <typename T>
 bool DSAVLTree<T>::contains(Node<T>* n, T& val)
 {
-//    std::cout << "contains function" << std::endl;
     if (n == nullptr)
         return false;
     else if (n->getData() == val)
@@ -234,7 +225,6 @@ bool DSAVLTree<T>::contains(Node<T>* n, T& val)
 template <typename T>
 void DSAVLTree<T>::insert(Node<T>*& n, T& val)//private
 {
-//    std::cout << "insert function" << std::endl;
     if (n == nullptr){//tree is empty or at the end of a leaf
         n = new Node<T>(val);//make new node to insert
     }
@@ -258,27 +248,6 @@ T& DSAVLTree<T>::find(Node<T>* node, T& val)//TODO add an edge case for when the
     else
         return find(node->getRight(), val);
 }
-//Node<T>*& DSAVLTree<T>::find(Node<T>* node, T& val)//iterative TODO seg fault
-//{
-//    Node<T>* empty;
-//    std::cout << "find function" << std::endl;
-//    if (node == nullptr)
-//        return empty;
-//    while (node != nullptr)
-//    {
-//        std::cout << "while loop" << std::endl;
-//        if (node->getData() == val){
-//            std::cout << "Found node" << std::endl;
-//            return node;
-//        }
-//        else if (val < node->getData())
-//            node = node->getLeft();
-//        else
-//            node = node->getRight();
-//    }
-//    std::cout << "not found" << std::endl;
-//    return empty;
-//}
 
 template <typename T>
 void DSAVLTree<T>::balanceTree(Node<T>*& node)
