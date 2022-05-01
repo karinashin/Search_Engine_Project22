@@ -13,6 +13,15 @@ Document::Document(string t, string p, string d, string f, string id)
     uuid = id;
 }
 
+Document& Document::operator= (const Document& copy)
+{
+    title = copy.title;
+    publication = copy.publication;
+    date = copy.date;
+    filePath = copy.filePath;
+    uuid = copy.uuid;
+}
+
 bool Document::operator==(const Document& d)
 {
     return filePath == d.filePath;//if they have the same path, they're the same doc

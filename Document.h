@@ -19,6 +19,7 @@ private:
 public:
     Document(string t, string p, string d, string f, string id);
 
+    Document& operator= (const Document& copy);
     bool operator==(const Document& d);
 
     string& getTitle();

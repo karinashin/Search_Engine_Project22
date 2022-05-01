@@ -23,9 +23,11 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
         if (curr.getStr() == "and" || curr.getStr() == "or"){
             if (curr.getStr() == "and"){//perform corresponding set operation
 //                std::cout << "intersection" << std::endl;
-                vector<Word> words = parseAndOr();
-                for (int i = 0; i < words.size(); i++)
-                    intersection(words.at(i));
+                vector<Word> wordList = parseAndOr();
+                for (int i = 0; i < wordList.size(); i++){
+                    cout << wordList.at(i).getStr() << endl;
+                    intersection(wordList.at(i), words);
+                }
             }
             else{
 //                std::cout << "union" << std::endl;
@@ -70,7 +72,7 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
             query = query.substr(space + 1);//cut off operator KEEP
 //            cout << "query: " << query << endl;
             Word person(findPersonOrg());
-//            std::cout << "person intersection" << std::endl;
+            cout << "person " << person.getStr() << std::endl;
             if (people.contains(person)){
                 addPersonOrg(people.find(people.getRoot(), person).getDocs());//index has to include only those that have this person
                 queryWords.push_back(people.find(people.getRoot(), person));
@@ -175,24 +177,6 @@ Word QueryProcessor::findPersonOrg()//operator is already removed from query
     return person;
 }
 
-//void QueryProcessor::intersection(vector<Document>& a, vector<Document>& b)//AND keyword
-//{
-//    //AND a and b together and add to the final index, no duplicates
-//    //only add if the document is in both a and b
-//    std::cout << "intersection" << std::endl;
-//
-//    for (int i = 0; i < a.size(); i++)
-//    {
-//        vector<Document>::iterator it = find(b.begin(), b.end(), a.at(i));//look for each element of a in b
-//        if (it != b.end())//doc exits in b
-//        {
-//            vector<Document>::iterator finalIt = find(finalIndex.begin(), finalIndex.end(), *it);
-//            if (finalIt == finalIndex.end())//if the doc is NOT in the final index, add it
-//                finalIndex.push_back(*it);
-//        }
-//    }
-//}
-
 void QueryProcessor::setUnion(vector<Word> a, DSAVLTree<Word>& tree)//OR keyword
 {
     for (int i = 0; i < a.size(); i++)//for every word object in the OR operator
@@ -218,77 +202,43 @@ void QueryProcessor::setUnion(vector<Word> a, DSAVLTree<Word>& tree)//OR keyword
     }
 }
 
-void QueryProcessor::intersection(Word& word)//AND keyword
+void QueryProcessor::intersection(Word& word, DSAVLTree<Word>& tree)//AND keyword
 {
-    vector<Document> temp;
+    vector<Document> finalList;
     if (finalIndex.size() == 0)//first word
     {
-        for (int i = 0; i < word.getDocs().size(); i++)
-            finalIndex.push_back(word.getDocs().at(i));
+        cout << "if statement" << endl;
+        if (tree.contains(word))
+        {
+            vector<Document> temp = tree.find(tree.getRoot(), word).getDocs();
+            for (int i = 0; i < temp.size(); i++)
+                finalIndex.push_back(temp.at(i));
+        }
+        else
+            cout << word.getStr() << " not found" << endl;
     }
     else
     {
-        for (int i = 0; i < word.getDocs().size(); i++)
+        vector<Document> temp;
+        if (tree.contains(word))
+            temp = tree.find(tree.getRoot(), word).getDocs();
+        else
+            cout << word.getStr() << " not found" << endl;
+        cout << "else statment" << endl;
+        for (int i = 0; i < temp.size(); i++)
         {
-            vector<Document>::iterator it = find(finalIndex.begin(), finalIndex.end(), word.getDocs().at(i));
-            if (it != finalIndex.end())//doc of a exists in final, only add docs that are in word.getDocs and final
-                temp.push_back(*it);//add the docs that contain the word from the finalIndex
+            cout << "inner for loop running" << endl;
+            vector<Document>::iterator it = find(finalIndex.begin(), finalIndex.end(), temp.at(i));
+            if (it != finalIndex.end()){//doc of a exists in final, only add docs that are in word.getDocs and final
+                finalList.push_back(*it);//add the docs that contain the word from the finalIndex
+                cout << "added to final list" << endl;
+            }
         }
-        finalIndex = temp;//should only contain docs that contain the word
+        cout << "Done" << endl;
+        finalIndex.clear();
+        finalIndex = finalList;//should only contain docs that contain the word
     }
 }
-
-//void QueryProcessor::intersection(vector<Word> a, DSAVLTree<Word>& tree)//AND keyword
-//{//TODO Doesn't work
-//    //a holds the words in the intersection
-////    for (int i = 0; i < a.size(); i++)
-////        cout << a.at(i).getStr() << endl;
-//
-////    bool check = true;
-//    vector<Document> temp;
-//    for (int i = 0; i < a.size(); i++){//find the first word in a that is in the tree
-//        if (tree.contains(a.at(i))){
-//            temp = tree.find(tree.getRoot(), a.at(i)).getDocs();
-//            cout << "a: " << a.at(i).getStr() << endl;
-//            break;
-//        }
-//        else{
-//            cout << a.at(i).getStr() << " is not found." << endl;
-//        }
-//    }
-//
-//    cout << "temp: " << temp.size() << endl;
-//
-////    vector<Document> temp = tree.find(tree.getRoot(), a.at(0))->getData().getDocs();
-//    for (int i = 0; i < temp.size(); i++)//for each doc of the first word (Word)
-//    {
-//        bool check = true;
-//        vector<Document>::iterator it;
-//        for (int j = 0; j < a.size(); j++){//check if the doc is in every other docs index (a.at(j))
-//            //need to have a check for if a.at(j) is the same as temp?
-//            vector<Document> other;
-//            if (tree.contains(a.at(j)))
-//                other = tree.find(tree.getRoot(), a.at(j)).getDocs();
-////            cout << "a.at(j) " << a.at(j).getStr() << endl;
-////            cout << "a.at(j).getSize() " << other.size() << endl;
-////            vector<Document> other = tree.find(tree.getRoot(), a.at(j))->getData().getDocs();
-//            it = find(other.begin(), other.end(), temp.at(i));//look for each element of a in b
-//            if (it == other.end())//doc does NOT exit in another words index
-//            {
-//                cout << "false" << endl;
-//                check = false;
-//                break;//don't add doc to final index
-//            }
-//        }
-//        if (check){//if the doc is in all word's indexes
-//            vector<Document>::iterator finalIt = find(finalIndex.begin(), finalIndex.end(), *it);
-//            if (finalIt == finalIndex.end()){//if the doc is NOT in the final index, add it
-//                finalIndex.push_back(*it);
-//                cout << "added to final" << endl;
-//            }
-//        }
-//    }
-//}
 
 void QueryProcessor::addTerm(vector<Document>& a)
 {
@@ -314,7 +264,8 @@ void QueryProcessor::complement(vector<Document>& a)//delete set a from finalInd
 }
 
 void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from final that don't include the person/org
-{//i think it works?
+{//doesn't work with AND EX: AND investor stock PERSON cramer
+    cout << "Add person/org" << endl;
     //if finalIndex already has values, remove any docs that don't contain person/org
     //else: query only has person/org keywords, just add the files that contain the person/org
     if (finalIndex.size() > 0)
