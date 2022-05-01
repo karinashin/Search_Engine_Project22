@@ -19,7 +19,7 @@ private:
     string query;
     vector<Document> finalIndex;//list of documents that contains the query info
     vector<Word> queryWords;//words in the query, make sure its the actual Word object from the tree (has the doc list)
-    vector<Document> best;//list of frequencies for each word in its documents for the entire query
+    vector<Document> best;//list of top 15 results according to freq
 
 public:
     QueryProcessor();
@@ -28,7 +28,8 @@ public:
     Word findPersonOrg();//get the full name of the person being searched for (accounts for those w/first+last
 //    void intersection(vector<Document>& a, vector<Document>&b);//AND keyword
     void setUnion(vector<Word> a, DSAVLTree<Word>& tree);//OR keyword
-    void intersection(vector<Word> a, DSAVLTree<Word>& tree);//AND keyword
+    void intersection(Word& word);//AND keyword
+//    void intersection(vector<Word> a, DSAVLTree<Word>& tree);//AND keyword
     void addTerm(vector<Document>& a);//add a single term's docs to the final
     void complement(vector<Document>& a);//set subtraction
     void addPersonOrg(vector<Document>& a);//remove any docs that don't include the given person or org

@@ -33,6 +33,7 @@ public:
     void stats();
     void getTopWords();//prints out top 25 most frequent words
     DocParser& getDocParser();//used to access word/org/person avl trees
+    QueryProcessor& getQueryProcessor();
 };
 
 

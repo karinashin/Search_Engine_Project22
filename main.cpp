@@ -20,7 +20,9 @@ int main(int argc, char** argv) {
     UserInterface parse;
     parse.run(argv[2]);
 //    parse.parseDocs(argv[2]);//absolute path
-
+//    string query = "investors";
+//    StopWord word;
+//    parse.getQueryProcessor().parseQuery(query, parse.getDocParser().getWordTree(), parse.getDocParser().getOrgTree(), parse.getDocParser().getPersonTree(), word);
 //    end = std::chrono::high_resolution_clock::now();
 //    //calculate the duration between start and end and print to the terminal
 //    std::chrono::duration<double> time_in_seconds = end - start;

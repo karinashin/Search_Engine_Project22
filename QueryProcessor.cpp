@@ -23,7 +23,9 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
         if (curr.getStr() == "and" || curr.getStr() == "or"){
             if (curr.getStr() == "and"){//perform corresponding set operation
 //                std::cout << "intersection" << std::endl;
-                intersection(parseAndOr(), words);
+                vector<Word> words = parseAndOr();
+                for (int i = 0; i < words.size(); i++)
+                    intersection(words.at(i));
             }
             else{
 //                std::cout << "union" << std::endl;
@@ -46,7 +48,7 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
 
             if (words.contains(word1)){
                 complement(words.find(words.getRoot(), word1).getDocs());
-                queryWords.push_back(word1);//for ranking
+                queryWords.push_back(words.find(words.getRoot(), word1));//for ranking
             }
             else
                 cout << word1.getStr() << " is not found." << endl;
@@ -56,8 +58,10 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
             query = query.substr(space + 1);//cut off operator
             Word org(findPersonOrg());
 
-            if (orgs.contains(org))
+            if (orgs.contains(org)){
                 addPersonOrg(orgs.find(orgs.getRoot(), org).getDocs());
+                queryWords.push_back(orgs.find(orgs.getRoot(), org));
+            }
             else
                 cout << org.getStr() << " is not found." << endl;
 //            addPersonOrg(orgs.find(orgs.getRoot(), org)->getData().getDocs());
@@ -67,8 +71,10 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
 //            cout << "query: " << query << endl;
             Word person(findPersonOrg());
 //            std::cout << "person intersection" << std::endl;
-            if (people.contains(person))
+            if (people.contains(person)){
                 addPersonOrg(people.find(people.getRoot(), person).getDocs());//index has to include only those that have this person
+                queryWords.push_back(people.find(people.getRoot(), person));
+            }
             else
                 cout << person.getStr() << " is not found." << endl;
             //addPersonOrg(people.find(people.getRoot(), person)->getData().getDocs());
@@ -78,7 +84,7 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
             term.stemming();
             if (words.contains(term)){
                 addTerm(words.find(words.getRoot(), term).getDocs());
-                queryWords.push_back(term);
+                queryWords.push_back(words.find(words.getRoot(), term));
             }
             else
                 cout << term.getStr() << " is not found." << endl;
@@ -87,8 +93,12 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
         }
         space = query.find(" ");//to check if youve reached the end of the query
     }
+//    cout << "Query words: " << endl;
+//    for (int i = 0; i < queryWords.size(); i++)
+//        cout << queryWords.at(i) << endl;
+//    cout << "done parsing query" << endl;
 
-    rankIndex();
+//    rankIndex();//TODO
 }
 
 vector<Word> QueryProcessor::parseAndOr()
@@ -110,7 +120,7 @@ vector<Word> QueryProcessor::parseAndOr()
                 word = query.substr(0, space);
                 word.stemming();
                 args.push_back(word);
-                queryWords.push_back(word);//for ranking
+//                queryWords.push_back(word);//for ranking
                 query = query.substr(space + 1);
             }
             else
@@ -122,7 +132,7 @@ vector<Word> QueryProcessor::parseAndOr()
             query = "";//empty query
             word.stemming();
             args.push_back(word);
-            queryWords.push_back(word);//for ranking
+//            queryWords.push_back(word);//for ranking
             break;
         }
     }
@@ -160,7 +170,7 @@ Word QueryProcessor::findPersonOrg()//operator is already removed from query
     }
 //    cout << "Name: " << name << endl;
     Word person(name);
-    queryWords.push_back(person);//for ranking
+//    queryWords.push_back(person);//for ranking
 
     return person;
 }
@@ -189,8 +199,10 @@ void QueryProcessor::setUnion(vector<Word> a, DSAVLTree<Word>& tree)//OR keyword
     {
 //        cout << a.at(i).getStr() << endl;
         vector<Document> temp;
-        if (tree.contains(a.at(i)))
+        if (tree.contains(a.at(i))){
             temp = tree.find(tree.getRoot(), a.at(i)).getDocs();
+            queryWords.push_back(tree.find(tree.getRoot(), a.at(i)));
+        }
         else{
             cout << a.at(i).getStr() << " is not found." << endl;
             continue;
@@ -206,55 +218,77 @@ void QueryProcessor::setUnion(vector<Word> a, DSAVLTree<Word>& tree)//OR keyword
     }
 }
 
-void QueryProcessor::intersection(vector<Word> a, DSAVLTree<Word>& tree)//AND keyword
-{//TODO Doesn't work
-    //a holds the words in the intersection
-//    for (int i = 0; i < a.size(); i++)
-//        cout << a.at(i).getStr() << endl;
-
-//    bool check = true;
+void QueryProcessor::intersection(Word& word)//AND keyword
+{
     vector<Document> temp;
-    for (int i = 0; i < a.size(); i++){//find the first word in a that is in the tree
-        if (tree.contains(a.at(i))){
-            temp = tree.find(tree.getRoot(), a.at(i)).getDocs();
-            cout << "a: " << a.at(i).getStr() << endl;
-            break;
-        }
-        else{
-            cout << a.at(i).getStr() << " is not found." << endl;
-        }
-    }
-
-    cout << "temp: " << temp.size() << endl;
-
-//    vector<Document> temp = tree.find(tree.getRoot(), a.at(0))->getData().getDocs();
-    for (int i = 0; i < temp.size(); i++)//for each doc of the first word (Word)
+    if (finalIndex.size() == 0)//first word
     {
-        bool check = true;
-        vector<Document>::iterator it;
-        for (int j = 0; j < a.size(); j++){//check if the doc is in every other docs index (a.at(j))
-            //need to have a check for if a.at(j) is the same as temp?
-            vector<Document> other = tree.find(tree.getRoot(), a.at(j)).getDocs();
-            cout << "a.at(j) " << a.at(j).getStr() << endl;
-            cout << "a.at(j).getSize() " << other.size() << endl;
-//            vector<Document> other = tree.find(tree.getRoot(), a.at(j))->getData().getDocs();
-            it = find(other.begin(), other.end(), temp.at(i));//look for each element of a in b
-            if (it == other.end())//doc does NOT exit in another words index
-            {
-                cout << "false" << endl;
-                check = false;
-                break;//don't add doc to final index
-            }
+        for (int i = 0; i < word.getDocs().size(); i++)
+            finalIndex.push_back(word.getDocs().at(i));
+    }
+    else
+    {
+        for (int i = 0; i < word.getDocs().size(); i++)
+        {
+            vector<Document>::iterator it = find(finalIndex.begin(), finalIndex.end(), word.getDocs().at(i));
+            if (it != finalIndex.end())//doc of a exists in final, only add docs that are in word.getDocs and final
+                temp.push_back(*it);//add the docs that contain the word from the finalIndex
         }
-        if (check){//if the doc is in all word's indexes
-            vector<Document>::iterator finalIt = find(finalIndex.begin(), finalIndex.end(), *it);
-            if (finalIt == finalIndex.end()){//if the doc is NOT in the final index, add it
-                finalIndex.push_back(*it);
-                cout << "added to final" << endl;
-            }
-        }
+        finalIndex = temp;//should only contain docs that contain the word
     }
 }
+
+//void QueryProcessor::intersection(vector<Word> a, DSAVLTree<Word>& tree)//AND keyword
+//{//TODO Doesn't work
+//    //a holds the words in the intersection
+////    for (int i = 0; i < a.size(); i++)
+////        cout << a.at(i).getStr() << endl;
+//
+////    bool check = true;
+//    vector<Document> temp;
+//    for (int i = 0; i < a.size(); i++){//find the first word in a that is in the tree
+//        if (tree.contains(a.at(i))){
+//            temp = tree.find(tree.getRoot(), a.at(i)).getDocs();
+//            cout << "a: " << a.at(i).getStr() << endl;
+//            break;
+//        }
+//        else{
+//            cout << a.at(i).getStr() << " is not found." << endl;
+//        }
+//    }
+//
+//    cout << "temp: " << temp.size() << endl;
+//
+////    vector<Document> temp = tree.find(tree.getRoot(), a.at(0))->getData().getDocs();
+//    for (int i = 0; i < temp.size(); i++)//for each doc of the first word (Word)
+//    {
+//        bool check = true;
+//        vector<Document>::iterator it;
+//        for (int j = 0; j < a.size(); j++){//check if the doc is in every other docs index (a.at(j))
+//            //need to have a check for if a.at(j) is the same as temp?
+//            vector<Document> other;
+//            if (tree.contains(a.at(j)))
+//                other = tree.find(tree.getRoot(), a.at(j)).getDocs();
+////            cout << "a.at(j) " << a.at(j).getStr() << endl;
+////            cout << "a.at(j).getSize() " << other.size() << endl;
+////            vector<Document> other = tree.find(tree.getRoot(), a.at(j))->getData().getDocs();
+//            it = find(other.begin(), other.end(), temp.at(i));//look for each element of a in b
+//            if (it == other.end())//doc does NOT exit in another words index
+//            {
+//                cout << "false" << endl;
+//                check = false;
+//                break;//don't add doc to final index
+//            }
+//        }
+//        if (check){//if the doc is in all word's indexes
+//            vector<Document>::iterator finalIt = find(finalIndex.begin(), finalIndex.end(), *it);
+//            if (finalIt == finalIndex.end()){//if the doc is NOT in the final index, add it
+//                finalIndex.push_back(*it);
+//                cout << "added to final" << endl;
+//            }
+//        }
+//    }
+//}
 
 void QueryProcessor::addTerm(vector<Document>& a)
 {
@@ -306,6 +340,9 @@ void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from fin
 
 void QueryProcessor::rankIndex()
 {
+    cout << "Rank index" << endl;
+//    cout << "finalIndex size " << finalIndex.size() << endl;
+//    cout << "query words size: " << queryWords.size() << endl;
     vector<int> freqs; //corresponding total freqs for each doc in finalIndex
     for (int queryIndex = 0; queryIndex < finalIndex.size(); queryIndex++)//for every doc in final index
     {
@@ -314,15 +351,22 @@ void QueryProcessor::rankIndex()
         {
             //get the each words frequency in the current doc and add them all together
             sum += queryWords.at(i).getDocFreq(finalIndex.at(queryIndex));//add total freq of each word for this doc
+            cout << queryWords.at(i).getDocFreq(finalIndex.at(queryIndex)) << " " << finalIndex.at(queryIndex).getPath() << endl;
         }
         freqs.push_back(sum);
+//        cout << "sum: " << sum << endl;
     }
     //result: total frequency for each doc
 
+    cout << "Frequency" << endl;
+    for (int i = 0; i < freqs.size(); i++)
+        cout << freqs.at(i) << " " << finalIndex.at(i).getPath() << endl;
+
+
     //get the top 15 docs with the highest freq
-    int highest = freqs.at(0);
-    int index = 0;
     for (int n = 0; n < 15; n++){
+        int highest = freqs.at(0);
+        int index = 0;
         if (n > freqs.size())//less that 15 docs in the finalIndex
             break;
         for (int i = 1; i < freqs.size(); i++)//find the next highest freq
@@ -333,8 +377,14 @@ void QueryProcessor::rankIndex()
             }
         }
         best.push_back(finalIndex.at(index));//get the corresponding doc for that freq
-        //TODO remove freqs.at(i) and finalIndex.at(i) maybe make a copy of finalIndex so that i don't remove the actual values
+        cout << "next higheset frequency: " << freqs.at(index) << endl;
+        freqs.erase(freqs.begin() + index);
+        finalIndex.erase(finalIndex.begin() + index);
     }
+
+//    cout << "Best 15: " << endl;
+//    for (int i = best.size()-1; i >= 0; i--)
+//        cout << best.at(i).getPath() << endl;
 }
 
 bool QueryProcessor::specialStopCheck(StopWord& stop, string& word)

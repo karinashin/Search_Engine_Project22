@@ -100,7 +100,22 @@ void UserInterface::parseDocs(const string& direct)
     std::cout << "done parsing!" << std::endl;
 }
 
-void UserInterface::displayResults()//TODO change getFinal to getBest()
+//void UserInterface::displayResults()//with ranking
+//{
+//    if (process.getBest().size() == 0)
+//        cout << "No results found" << endl;
+//
+//    for (int i = 0; i < process.getBest().size(); i++)
+//    {
+//        if (i == 15)
+//            break;
+//        cout << i + 1 << ") ";
+//        cout << "Title: " << process.getBest().at(i).getTitle() << ", " << process.getBest().at(i).getPub() << ", Date: " << process.getBest().at(i).getDate() << endl;
+//        cout << "Path: " << process.getBest().at(i).getPath() << endl;
+//    }
+//}
+
+void UserInterface::displayResults()//without ranking
 {
     if (process.getFinal().size() == 0)
         cout << "No results found" << endl;
@@ -153,3 +168,5 @@ void UserInterface::getTopWords()
 }
 
 DocParser& UserInterface::getDocParser() { return docReader; }
+
+QueryProcessor& UserInterface::getQueryProcessor() { return process; }
