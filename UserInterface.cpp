@@ -13,37 +13,29 @@ void UserInterface::run(const string& file)
     bool go = true;
 
     string choice;
-//    while (choice != "1" && choice != "2"){
-//        cout << "Enter 1 to parse files or 2 to use persistence file: " << endl;
-//        cin.clear();
-//        cin >> choice;
-//        if (choice == "1"){
-//            cout << "parsing..." << endl;
-//            start = std::chrono::high_resolution_clock::now();
-//            docReader.getFiles(file, stops);
-//            end = std::chrono::high_resolution_clock::now();
-//            std::chrono::duration<double> time_in_seconds = end - start;
-//            cout << std::fixed << "Parsing Time: " << time_in_seconds.count() << endl;
-//            cout << "done!" << endl;
-//        }
-//        else if (choice == "2"){
-//            cout << "parsing..." << endl;
-//            docReader.persistenceIndex();//TODO
-//            cout << "done!" << endl;
-//        }
-//        else{
-//            cout << "Incorrect input." << endl;
-//        }
-//    }
-
-    //Parse documents
-    cout << "parsing..." << endl;
-    start = std::chrono::high_resolution_clock::now();
-    docReader.getFiles(file, stops);
-    end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> time_in_seconds = end - start;
-    cout << std::fixed << "Parsing Time: " << time_in_seconds.count() << endl;
-    cout << "done!" << endl;
+    while (choice != "1" && choice != "2"){
+        cout << "Enter 1 to parse files or 2 to use persistence file: " << endl;
+        cin.clear();
+        cin >> choice;
+        if (choice == "1"){
+            cout << "parsing..." << endl;
+            start = std::chrono::high_resolution_clock::now();
+            docReader.getFiles(file, stops);
+            end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> time_in_seconds = end - start;
+            cout << std::fixed << "Parsing Time: " << time_in_seconds.count() << endl;
+            cout << "done!" << endl;
+        }
+        else if (choice == "2"){
+            cout << "parsing..." << endl;
+//            docReader.persistenceIndex();
+            docReader.getFiles(file, stops);
+            cout << "done!" << endl;
+        }
+        else{
+            cout << "Incorrect input." << endl;
+        }
+    }
 
     while (go)
     {
@@ -118,7 +110,7 @@ void UserInterface::displayResults()//with ranking
             break;
         cout << i + 1 << ") ";
         cout << "Title: " << process.getBest().at(i).getTitle() << ", " << process.getBest().at(i).getPub() << ", Date: " << process.getBest().at(i).getDate() << endl;
-        cout << "Path: " << process.getBest().at(i).getPath() << endl;
+//        cout << "Path: " << process.getBest().at(i).getPath() << endl;
     }
 }
 

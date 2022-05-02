@@ -155,6 +155,7 @@ Word QueryProcessor::findPersonOrg()//operator is already removed from query
         count++;
     }
     Word person(name);
+    person.toLower();
 
     return person;
 }
@@ -264,9 +265,6 @@ void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from fin
 
 void QueryProcessor::rankIndex()
 {
-    cout << "Rank index" << endl;
-    cout << "finalIndex size " << finalIndex.size() << endl;
-    cout << "query words size: " << queryWords.size() << endl;
     vector<int> freqs; //corresponding total freqs for each doc in finalIndex
     for (int queryIndex = 0; queryIndex < finalIndex.size(); queryIndex++)//for every doc in final index
     {
@@ -281,7 +279,6 @@ void QueryProcessor::rankIndex()
         }
         freqs.push_back(sum);
     }
-    cout << "done with for loop" << endl;
     //result: total frequency for each doc
 
     //get the top 15 docs with the highest freq
