@@ -75,6 +75,12 @@ void DocParser::parse(const string& filename, StopWord& stop) {
         curr.removePunc();//remove punctuation
         curr.stemming();
 
+        if (curr.getStr().empty()){//don't insert an empty string
+            text = text.substr(space + 1);
+            space = text.find(" ");
+            continue;
+        }
+
         //put unique words into the avl tree
         if (!words.contains(curr)){//if the word is not already in the tree/new unique word
             curr.incrFreq(currDoc);

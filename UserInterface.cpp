@@ -1,5 +1,5 @@
 //
-// Created by 18476 on 4/23/2022.
+// Created by Karina Shin on 4/23/2022.
 //
 
 #include "UserInterface.h"
@@ -19,7 +19,11 @@ void UserInterface::run(const string& file)
         cin >> choice;
         if (choice == "1"){
             cout << "parsing..." << endl;
+            start = std::chrono::high_resolution_clock::now();
             docReader.getFiles(file, stops);
+            end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> time_in_seconds = end - start;
+            cout << std::fixed << "Parsing Time: " << time_in_seconds.count() << endl;
             cout << "done!" << endl;
         }
         else if (choice == "2"){
@@ -97,35 +101,35 @@ void UserInterface::parseDocs(const string& direct)
     std::cout << "done parsing!" << std::endl;
 }
 
-//void UserInterface::displayResults()//with ranking
-//{
-//    if (process.getBest().size() == 0)
-//        cout << "No results found" << endl;
-//
-//    for (int i = 0; i < process.getBest().size(); i++)
-//    {
-//        if (i == 15)
-//            break;
-//        cout << i + 1 << ") ";
-//        cout << "Title: " << process.getBest().at(i).getTitle() << ", " << process.getBest().at(i).getPub() << ", Date: " << process.getBest().at(i).getDate() << endl;
-//        cout << "Path: " << process.getBest().at(i).getPath() << endl;
-//    }
-//}
-
-void UserInterface::displayResults()//without ranking
+void UserInterface::displayResults()//with ranking
 {
-    if (process.getFinal().size() == 0)
+    if (process.getBest().size() == 0)
         cout << "No results found" << endl;
 
-    for (int i = 0; i < process.getFinal().size(); i++)
+    for (int i = 0; i < process.getBest().size(); i++)
     {
         if (i == 15)
             break;
         cout << i + 1 << ") ";
-        cout << "Title: " << process.getFinal().at(i).getTitle() << ", " << process.getFinal().at(i).getPub() << ", Date: " << process.getFinal().at(i).getDate() << endl;
-        cout << "Path: " << process.getFinal().at(i).getPath() << endl;
+        cout << "Title: " << process.getBest().at(i).getTitle() << ", " << process.getBest().at(i).getPub() << ", Date: " << process.getBest().at(i).getDate() << endl;
+        cout << "Path: " << process.getBest().at(i).getPath() << endl;
     }
 }
+
+//void UserInterface::displayResults()//without ranking
+//{
+//    if (process.getFinal().size() == 0)
+//        cout << "No results found" << endl;
+//
+//    for (int i = 0; i < process.getFinal().size(); i++)
+//    {
+//        if (i == 15)
+//            break;
+//        cout << i + 1 << ") ";
+//        cout << "Title: " << process.getFinal().at(i).getTitle() << ", " << process.getFinal().at(i).getPub() << ", Date: " << process.getFinal().at(i).getDate() << endl;
+//        cout << "Path: " << process.getFinal().at(i).getPath() << endl;
+//    }
+//}
 
 void UserInterface::showText(Document& d)
 {

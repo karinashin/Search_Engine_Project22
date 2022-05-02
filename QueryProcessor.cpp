@@ -88,7 +88,7 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
         space = query.find(" ");//to check if youve reached the end of the query
     }
 
-//    rankIndex();//TODO
+    rankIndex();//TODO
 }
 
 vector<Word> QueryProcessor::parseAndOr()
@@ -268,6 +268,7 @@ void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from fin
 
 void QueryProcessor::rankIndex()
 {
+    //TODO something with NOT operator doesn't work with ranking system
     cout << "Rank index" << endl;
 //    cout << "finalIndex size " << finalIndex.size() << endl;
 //    cout << "query words size: " << queryWords.size() << endl;
@@ -279,20 +280,22 @@ void QueryProcessor::rankIndex()
         {
             //get the each words frequency in the current doc and add them all together
             sum += queryWords.at(i).getDocFreq(finalIndex.at(queryIndex));//add total freq of each word for this doc
-            cout << queryWords.at(i).getDocFreq(finalIndex.at(queryIndex)) << " " << finalIndex.at(queryIndex).getPath() << endl;
+//            cout << queryWords.at(i).getDocFreq(finalIndex.at(queryIndex)) << " " << finalIndex.at(queryIndex).getPath() << endl;
         }
         freqs.push_back(sum);
 //        cout << "sum: " << sum << endl;
     }
     //result: total frequency for each doc
 
-    cout << "Frequency" << endl;
-    for (int i = 0; i < freqs.size(); i++)
-        cout << freqs.at(i) << " " << finalIndex.at(i).getPath() << endl;
+//    cout << "Frequency" << endl;
+//    for (int i = 0; i < freqs.size(); i++)
+//        cout << freqs.at(i) << " " << finalIndex.at(i).getPath() << endl;
 
 
     //get the top 15 docs with the highest freq
     for (int n = 0; n < 15; n++){
+//        if (n > freqs.size() || freqs.size() == 0)//less that 15 docs in the finalIndex
+//            break;
         int highest = freqs.at(0);
         int index = 0;
         if (n > freqs.size())//less that 15 docs in the finalIndex
@@ -305,7 +308,7 @@ void QueryProcessor::rankIndex()
             }
         }
         best.push_back(finalIndex.at(index));//get the corresponding doc for that freq
-        cout << "next higheset frequency: " << freqs.at(index) << endl;
+//        cout << "next higheset frequency: " << freqs.at(index) << endl;
         freqs.erase(freqs.begin() + index);
         finalIndex.erase(finalIndex.begin() + index);
     }
