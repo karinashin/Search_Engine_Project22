@@ -13,28 +13,37 @@ void UserInterface::run(const string& file)
     bool go = true;
 
     string choice;
-    while (choice != "1" && choice != "2"){
-        cout << "Enter 1 to parse files or 2 to use persistence file: " << endl;
-        cin.clear();
-        cin >> choice;
-        if (choice == "1"){
-            cout << "parsing..." << endl;
-            start = std::chrono::high_resolution_clock::now();
-            docReader.getFiles(file, stops);
-            end = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double> time_in_seconds = end - start;
-            cout << std::fixed << "Parsing Time: " << time_in_seconds.count() << endl;
-            cout << "done!" << endl;
-        }
-        else if (choice == "2"){
-            cout << "parsing..." << endl;
-            docReader.persistenceIndex();//TODO
-            cout << "done!" << endl;
-        }
-        else{
-            cout << "Incorrect input." << endl;
-        }
-    }
+//    while (choice != "1" && choice != "2"){
+//        cout << "Enter 1 to parse files or 2 to use persistence file: " << endl;
+//        cin.clear();
+//        cin >> choice;
+//        if (choice == "1"){
+//            cout << "parsing..." << endl;
+//            start = std::chrono::high_resolution_clock::now();
+//            docReader.getFiles(file, stops);
+//            end = std::chrono::high_resolution_clock::now();
+//            std::chrono::duration<double> time_in_seconds = end - start;
+//            cout << std::fixed << "Parsing Time: " << time_in_seconds.count() << endl;
+//            cout << "done!" << endl;
+//        }
+//        else if (choice == "2"){
+//            cout << "parsing..." << endl;
+//            docReader.persistenceIndex();//TODO
+//            cout << "done!" << endl;
+//        }
+//        else{
+//            cout << "Incorrect input." << endl;
+//        }
+//    }
+
+    //Parse documents
+    cout << "parsing..." << endl;
+    start = std::chrono::high_resolution_clock::now();
+    docReader.getFiles(file, stops);
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> time_in_seconds = end - start;
+    cout << std::fixed << "Parsing Time: " << time_in_seconds.count() << endl;
+    cout << "done!" << endl;
 
     while (go)
     {
@@ -56,10 +65,13 @@ void UserInterface::run(const string& file)
             cin >> choice;
             if (choice == "0")//exit
                 break;
-//            else if (choice == "1" || choice == "2" || choice == "3" || choice == "4" || choice == "5" || choice == "6" || choice == "7" || choice == "8" || choice == "9" || choice == "10" || choice == "11" || choice == "12" || choice == "13" || choice == "14" || choice == "15"){
-            else if (stoi(choice) > 0 && stoi(choice) <= process.getBest().size()){
-                showText(process.getBest().at(stoi(choice) - 1));
-                cout << endl;
+            else if (choice == "1" || choice == "2" || choice == "3" || choice == "4" || choice == "5" || choice == "6" || choice == "7" || choice == "8" || choice == "9" || choice == "10" || choice == "11" || choice == "12" || choice == "13" || choice == "14" || choice == "15"){
+                if (stoi(choice) > 0 && stoi(choice) <= process.getBest().size()){
+                    showText(process.getBest().at(stoi(choice) - 1));
+                    cout << endl;
+                }
+                else
+                    cout << "Incorrect input." << endl;
             }
             else
                 cout << "Incorrect input." << endl;
@@ -95,13 +107,6 @@ void UserInterface::clearIndex()
     docReader.getPersonTree().deleteTree(docReader.getPersonTree().getRoot());
 }
 
-void UserInterface::parseDocs(const string& direct)
-{
-    std::cout << "parsing documents..." << std::endl;
-    docReader.getFiles(direct, stops);
-    std::cout << "done parsing!" << std::endl;
-}
-
 void UserInterface::displayResults()//with ranking
 {
     if (process.getBest().size() == 0)
@@ -116,21 +121,6 @@ void UserInterface::displayResults()//with ranking
         cout << "Path: " << process.getBest().at(i).getPath() << endl;
     }
 }
-
-//void UserInterface::displayResults()//without ranking
-//{
-//    if (process.getFinal().size() == 0)
-//        cout << "No results found" << endl;
-//
-//    for (int i = 0; i < process.getFinal().size(); i++)
-//    {
-//        if (i == 15)
-//            break;
-//        cout << i + 1 << ") ";
-//        cout << "Title: " << process.getFinal().at(i).getTitle() << ", " << process.getFinal().at(i).getPub() << ", Date: " << process.getFinal().at(i).getDate() << endl;
-//        cout << "Path: " << process.getFinal().at(i).getPath() << endl;
-//    }
-//}
 
 void UserInterface::showText(Document& d)
 {
@@ -174,19 +164,11 @@ void UserInterface::topWordsHelper(Node<Word>* n)
     }
 }
 
-void UserInterface::getTopWords()
+void UserInterface::getTopWords()//go through tree and get the frequency of each word (in order)
 {
-    cout << "Get top words" << endl;
     topWordsHelper(docReader.getWordTree().getRoot());
     vector<Word> top;//top 25 words
-//    vector<int> freqs; //corresponding total freqs for each word
-//    vector<Word> all;//save words too? corresponding to freqs
-    //go through tree and get the frequency of each word (in order)
     //result: total frequency for each doc
-
-//    cout << "Frequency" << endl;
-//    for (int i = 0; i < freqs.size(); i++)
-//        cout << freqs.at(i) << " " << finalIndex.at(i).getPath() << endl;
 
     //get the top 25 most frequent words
     cout << "Top 25 Most Frequent Words: " << endl;
@@ -202,7 +184,6 @@ void UserInterface::getTopWords()
                 index = i;
             }
         }
-//        top.push_back(all.at(index));//get the corresponding doc for that freq
         cout << all.at(index) << ": " << frequency.at(index) << endl;
         frequency.erase(frequency.begin() + index);
         all.erase(all.begin() + index);

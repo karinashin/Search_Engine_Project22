@@ -8,7 +8,6 @@ DocParser::DocParser() {}
 void DocParser::parse(const string& filename, StopWord& stop) {
     numDocs++;
 
-    //TODO write to persistence file
     //parse main text
     rapidjson::Document doc;
 

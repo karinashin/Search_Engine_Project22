@@ -22,17 +22,15 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
         }
 
         if (curr.getStr() == "and" || curr.getStr() == "or"){
+            vector<Word> wordList = parseAndOr();
             if (curr.getStr() == "and"){//perform corresponding set operation
-                vector<Word> wordList = parseAndOr();
                 for (int i = 0; i < wordList.size(); i++){
                     intersection(wordList.at(i), words);
                 }
             }
             else{
-                setUnion(parseAndOr(), words);
-//                for (int i = 0; i < queryWords.size(); i++){
-//                    cout << queryWords.at(i).getStr() << endl;
-//                }
+                for (int i = 0; i < wordList.size(); i++)
+                    setUnion(wordList.at(i), words);
             }
         }
         else if (curr.getStr() == "not"){
@@ -51,7 +49,6 @@ void QueryProcessor::parseQuery(string& q, DSAVLTree<Word>& words, DSAVLTree<Wor
 
             if (words.contains(word1)){
                 complement(words.find(words.getRoot(), word1).getDocs());
-//                queryWords.push_back(words.find(words.getRoot(), word1));//won't have any frequency in docs since its "NOT"
             }
             else
                 cout << word1.getStr() << " is not found." << endl;
@@ -162,27 +159,21 @@ Word QueryProcessor::findPersonOrg()//operator is already removed from query
     return person;
 }
 
-void QueryProcessor::setUnion(vector<Word> a, DSAVLTree<Word>& tree)//OR keyword
+void QueryProcessor::setUnion(Word& word, DSAVLTree<Word> &tree)
 {
-    for (int i = 0; i < a.size(); i++)//for every word object in the OR operator
+    vector<Document> temp;
+    if (tree.contains(word)){
+        queryWords.push_back(tree.find(tree.getRoot(), word));
+        temp = tree.find(tree.getRoot(), word).getDocs();
+    }
+    else
+        cout << word.getStr() << " not found" << endl;
+
+    for (int i = 0; i < temp.size(); i++)
     {
-        vector<Document> temp;
-        if (tree.contains(a.at(i))){
-            temp = tree.find(tree.getRoot(), a.at(i)).getDocs();
-//            cout << "a.at(i): " << a.at(i).getStr() << endl;
-            queryWords.push_back(tree.find(tree.getRoot(), a.at(i)));
-//            cout << queryWords.at(queryWords.size()-1).getDocs().size();
-        }
-        else{
-            cout << a.at(i).getStr() << " is not found." << endl;
-            continue;
-        }
-        for (int d = 0; d < temp.size(); d++)//for every doc in the Word objects index
-        {
-            vector<Document>::iterator it = find(finalIndex.begin(), finalIndex.end(), temp.at(d));
-            if (it == finalIndex.end()){//if the doc is NOT in the final index, add it
-                finalIndex.push_back(temp.at(d));
-            }
+        vector<Document>::iterator it = find(finalIndex.begin(), finalIndex.end(), temp.at(i));
+        if (it == finalIndex.end()){//doc of a exists in final, only add docs that are in word.getDocs and final
+            finalIndex.push_back(temp.at(i));//add the docs that contain the word from the finalIndex
         }
     }
 }
@@ -274,53 +265,42 @@ void QueryProcessor::addPersonOrg(vector<Document>& a)//remove any docs from fin
 void QueryProcessor::rankIndex()
 {
     cout << "Rank index" << endl;
-//    cout << "finalIndex size " << finalIndex.size() << endl;
-//    cout << "query words size: " << queryWords.size() << endl;
+    cout << "finalIndex size " << finalIndex.size() << endl;
+    cout << "query words size: " << queryWords.size() << endl;
     vector<int> freqs; //corresponding total freqs for each doc in finalIndex
     for (int queryIndex = 0; queryIndex < finalIndex.size(); queryIndex++)//for every doc in final index
     {
         int sum = 0;
         for (int i = 0; i < queryWords.size(); i++)//for every word in query
         {
+            //if its an OR query, not every word will be in every file of finalIndex
             //get the each words frequency in the current doc and add them all together
-            sum += queryWords.at(i).getDocFreq(finalIndex.at(queryIndex));//add total freq of each word for this doc
-//            cout << queryWords.at(i).getDocFreq(finalIndex.at(queryIndex)) << " " << finalIndex.at(queryIndex).getPath() << endl;
-        }//doc not found
+            vector<Document>::iterator it = find(queryWords.at(i).getDocs().begin(), queryWords.at(i).getDocs().end(), finalIndex.at(queryIndex));
+            if (it != queryWords.at(i).getDocs().end())//this word is present in the doc
+                sum += queryWords.at(i).getDocFreq(finalIndex.at(queryIndex));//add total freq of each word for this doc
+        }
         freqs.push_back(sum);
-        cout << "sum: " << sum << endl;
     }
     cout << "done with for loop" << endl;
     //result: total frequency for each doc
 
-//    cout << "Frequency" << endl;
-//    for (int i = 0; i < freqs.size(); i++)
-//        cout << freqs.at(i) << " " << finalIndex.at(i).getPath() << endl;
-
-
     //get the top 15 docs with the highest freq
-//    for (int n = 0; n < 15; n++){
-////        if (n > freqs.size() || freqs.size() == 0)//less that 15 docs in the finalIndex
-////            break;
-//        int highest = freqs.at(0);
-//        int index = 0;
-//        if (n > freqs.size())//less that 15 docs in the finalIndex
-//            break;
-//        for (int i = 1; i < freqs.size(); i++)//find the next highest freq
-//        {
-//            if (freqs.at(i) > highest){//get highest freq
-//                highest = freqs.at(i);
-//                index = i;
-//            }
-//        }
-//        best.push_back(finalIndex.at(index));//get the corresponding doc for that freq
-////        cout << "next higheset frequency: " << freqs.at(index) << endl;
-//        freqs.erase(freqs.begin() + index);
-//        finalIndex.erase(finalIndex.begin() + index);
-//    }
-
-//    cout << "Best 15: " << endl;
-//    for (int i = best.size()-1; i >= 0; i--)
-//        cout << best.at(i).getPath() << endl;
+    for (int n = 0; n < 15; n++){
+        if (n > freqs.size() || freqs.size() == 0)//less that 15 docs in the finalIndex
+            break;
+        int highest = freqs.at(0);
+        int index = 0;
+        for (int i = 1; i < freqs.size(); i++)//find the next highest freq
+        {
+            if (freqs.at(i) > highest){//get highest freq
+                highest = freqs.at(i);
+                index = i;
+            }
+        }
+        best.push_back(finalIndex.at(index));//get the corresponding doc for that freq
+        freqs.erase(freqs.begin() + index);
+        finalIndex.erase(finalIndex.begin() + index);
+    }
 }
 
 bool QueryProcessor::specialStopCheck(StopWord& stop, string& word)

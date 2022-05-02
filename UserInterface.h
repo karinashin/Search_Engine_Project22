@@ -32,7 +32,6 @@ public:
 
     void run(const string& file);//run search engine
     void clearIndex();//delete every tree
-    void parseDocs(const string& direct);//parse all documents
     void displayResults();
     void showText(Document& d);
     void stats();

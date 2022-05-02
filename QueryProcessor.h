@@ -28,8 +28,8 @@ public:
     vector<Word> parseAndOr();
     Word findPersonOrg();//get the full name of the person being searched for (accounts for those w/first+last
 
-    void setUnion(vector<Word> a, DSAVLTree<Word>& tree);//OR keyword
-    void intersection(Word& word, DSAVLTree<Word> & tree);//AND keyword
+    void setUnion(Word& word, DSAVLTree<Word>& tree);
+    void intersection(Word& word, DSAVLTree<Word>& tree);//AND keyword
     void addTerm(vector<Document>& a);//add a single term's docs to the final
     void complement(vector<Document>& a);//set subtraction
     void addPersonOrg(vector<Document>& a);//remove any docs that don't include the given person or org
