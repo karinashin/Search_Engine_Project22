@@ -12,9 +12,7 @@
 
 using namespace std;
 int main(int argc, char** argv) {
-    //mnt/c/users/18476/c++/searchData 2648 files
-    //TODO LIST: Fix ranking articles, make persistence file (figure out how to erase contents of file)
-
+    //mnt/c/users/18476/c++/searchData
     UserInterface parse;
     parse.run(argv[1]);
 }

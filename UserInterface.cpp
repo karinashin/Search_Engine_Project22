@@ -56,8 +56,9 @@ void UserInterface::run(const string& file)
             cin >> choice;
             if (choice == "0")//exit
                 break;
-            else if (choice == "1" || choice == "2" || choice == "3" || choice == "4" || choice == "5" || choice == "6" || choice == "7" || choice == "8" || choice == "9" || choice == "10" || choice == "11" || choice == "12" || choice == "13" || choice == "14" || choice == "15"){
-                showText(process.getFinal().at(stoi(choice) - 1));
+//            else if (choice == "1" || choice == "2" || choice == "3" || choice == "4" || choice == "5" || choice == "6" || choice == "7" || choice == "8" || choice == "9" || choice == "10" || choice == "11" || choice == "12" || choice == "13" || choice == "14" || choice == "15"){
+            else if (stoi(choice) > 0 && stoi(choice) <= process.getBest().size()){
+                showText(process.getBest().at(stoi(choice) - 1));
                 cout << endl;
             }
             else
