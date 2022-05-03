@@ -150,8 +150,7 @@ void UserInterface::topWordsHelper(Node<Word>* n)
 {
     if (n != nullptr){
         topWordsHelper(n->getLeft());
-        frequency.push_back(n->getData().getTotal());
-        all.push_back(n->getData());
+        bestWords.insert(std::pair<int, Word>(n->getData().getTotal(), n->getData()));
         topWordsHelper(n->getRight());
     }
 }
@@ -164,21 +163,23 @@ void UserInterface::getTopWords()//go through tree and get the frequency of each
 
     //get the top 25 most frequent words
     cout << "Top 25 Most Frequent Words: " << endl;
+    map<int, Word>::iterator it = bestWords.begin();
+    map<int, Word>::iterator curr = bestWords.begin();
     for (int n = 0; n < 25; n++){
-        int highest = frequency.at(0);
-        int index = 0;
-        if (n > frequency.size())//less than 25 total words
+        it = bestWords.begin();
+        int highest = it->first;
+        if (n > bestWords.size())
             break;
-        for (int i = 1; i < frequency.size(); i++)//find the next highest freq
+        while (it != bestWords.end())
         {
-            if (frequency.at(i) > highest){//get highest freq
-                highest = frequency.at(i);
-                index = i;
+            if(it->first > highest){
+                highest = it->first;
+                curr = it;
             }
+            it++;
         }
-        cout << all.at(index) << ": " << frequency.at(index) << endl;
-        frequency.erase(frequency.begin() + index);
-        all.erase(all.begin() + index);
+        cout << curr->second << ": " << curr->first << endl;
+        bestWords.erase(curr);
     }
 }
 

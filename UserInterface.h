@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <chrono>
+#include <map>
 #include "DocParser.h"
 #include "QueryProcessor.h"
 #include "DSAVLTree.h"
@@ -22,10 +23,7 @@ private:
     DocParser docReader;
     QueryProcessor process;
     StopWord stops;
-
-    //for ranking
-    vector<int> frequency;//frequencies of words
-    vector<Word> all;//vector of all words
+    map<int, Word> bestWords;//for ranking
 
 public:
     UserInterface();

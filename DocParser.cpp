@@ -66,13 +66,13 @@ void DocParser::parse(const string& filename, StopWord& stop) {
         space = text.find(" ");
         Word curr(text.substr(0, space));
         curr.toLower();//remove caps
+        curr.removePunc();//remove punctuation
+        curr.stemming();
         if (stop.isStopWord(curr.getStr())){
             text = text.substr(space + 1);//cut off curr word
             space = text.find(" ");
             continue;//don't add to tree
         }
-        curr.removePunc();//remove punctuation
-        curr.stemming();
 
         if (curr.getStr().empty()){//don't insert an empty string
             text = text.substr(space + 1);
