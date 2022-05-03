@@ -1,6 +1,7 @@
 //
 // Created by Karina Shin on 4/5/2022.
 //
+//referenced from https://users.cs.fiu.edu/~weiss/dsaa_c++4/code/AvlTree.h
 
 #ifndef INC_22S_FINAL_PROJ_DSAVLTREE_H
 #define INC_22S_FINAL_PROJ_DSAVLTREE_H
@@ -111,7 +112,7 @@ private:
     Node<T>* root;
     int count;//total number of nodes
 
-    bool contains(Node<T>* n, T& val);//TODO test private functions?
+    bool contains(Node<T>* n, T& val);
     void insert(Node<T>*& n, T& val);
     int max(int a, int b);//get max of two integers
     int height(Node<T>* node);//get height from any starting node
@@ -178,7 +179,6 @@ DSAVLTree<T>& DSAVLTree<T>::operator= (const DSAVLTree<T>& copy)
 template <typename T>
 Node<T>& DSAVLTree<T>::copyHelper(Node<T>*& node)//for recursion
 {
-    //TODO might be wrong
     if (node == nullptr)//preOrder
         return node;//nothing more to copy
     Node<T>* curr = new Node<T>(node->getData());
@@ -239,7 +239,7 @@ void DSAVLTree<T>::insert(Node<T>*& n, T& val)//private
 }
 
 template <typename T>
-T& DSAVLTree<T>::find(Node<T>* node, T& val)//TODO add an edge case for when the word is not found
+T& DSAVLTree<T>::find(Node<T>* node, T& val)
 {
     if (node->getData() == val)
         return node->getData();
