@@ -1,11 +1,4 @@
-# Spring 2022 Final Project 
-
-## Important:
-
-- You DO NOT need to implement GitHub Actions for the final project.  
-- DO NOT attempt to push the data set for this project to Github.  
-  - Make sure your data folder is in the `.gitignore` file
-
-## Links:
-
-- Tutorial on RapidJSON by TA Christian > [here](https://github.com/Gouldilocks/rapidTutorial) <. 
+# Spring 2022 Data Structures Final Project 
+This program serves as a search engine for prefix Boolean queries entered by the user given a collection of JSON files of up to 60,000.
+First, a document parser records all important words, organizations, and persons listed in the file into AVL trees for the 3 categories. This process does not include stopwords and stems each word using the Porter2 Stemmer.
+After being given a Boolean query (e.g. "markets", "AND snap facebook", "bankruptcy NOT facebook", "OR facebook instagram ORG snap PERSON cramer") a query processor will parse the inputted query and determine which files contain the keywords in the query. Once all relevant files are found, the files are ranked by the frequency of the keywords in each file. Finally the user interface will display the article name of the top 15 most relevant files. To read one of the listed articles, the user simply enters the number of the file they wish to read. The user may continue to read the listed articles, enter a new query, ask for statistics of the search engine (number of files and unique words indexed), or exit the search engine. 
